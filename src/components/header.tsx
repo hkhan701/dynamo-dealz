@@ -16,10 +16,10 @@ export default function Header() {
       >
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 overflow-hidden rounded-full shadow-sm">
-            <Image src="/logo-png.png" alt="Logo" fill className="object-contain p-0.5" />
+            <Image src="/logo-png.png" alt="Logo" fill className="object-contain p-0.5 rounded-2xl" />
           </div>
 
-          <div className="hidden md:block mb-1">
+          <div className="md:block mb-1">
             <h1 className="etna-text text-2xl font-bold text-white">
               Oh Canada Deals
             </h1>
