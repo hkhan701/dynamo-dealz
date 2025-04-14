@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+
+const Etna = localFont({ 
+  src: './etna.otf',
+  variable: '--font-etna'
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${Etna.variable} ${geistSans.variable} ${geistMono.variable}  antialiased bg-leaf-background/20`}
       >
         {children}
       </body>
