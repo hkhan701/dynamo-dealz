@@ -19,30 +19,32 @@ interface Product {
   image_link: string
 }
 
+interface ProductData {
+  last_updated_time: string
+  products: Product[]
+}
+
 export default async function Home() {
   const filePath = path.join(process.cwd(), "public", "data", "Canada_garage_tools.json")
   const fileContent = fs.readFileSync(filePath, "utf-8")
-  const fileStats = fs.statSync(filePath)
-  const products: Product[] = JSON.parse(fileContent)
+  const jsonData: ProductData = JSON.parse(fileContent)
 
-  // Get the last updated time
-  const lastUpdated = fileStats.mtime
+  const products = jsonData.products
+  const lastUpdated = new Date(jsonData.last_updated_time)
 
   return (
     <div className="min-h-screen">
       <Header />
   
       <main className="flex flex-col items-center justify-center px-4 py-8">
-  <div className="w-full max-w-screen-xl mx-auto">
-    <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {products.map((product, index) => (
-        <ProductCard key={index} product={product} lastUpdated={lastUpdated} />
-      ))}
-    </div>
-  </div>
-</main>
-
-
+        <div className="w-full max-w-screen-xl mx-auto">
+          <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+            {products.map((product, index) => (
+              <ProductCard key={index} product={product} lastUpdated={lastUpdated} />
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

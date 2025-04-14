@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image"
 import Link from "next/link"
 import { Tag, ShoppingCart, Clock } from "lucide-react"
@@ -82,7 +84,7 @@ export default function ProductCard({ product, lastUpdated, className }: Product
             )}
             {product.promo_code && (
               <div className="flex justify-between">
-                <span>Promo:</span>
+                <span>Promo Code:</span>
                 <span className="font-medium">{product.promo_code}</span>
               </div>
             )}
