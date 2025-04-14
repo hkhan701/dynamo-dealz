@@ -1,10 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import { Search } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { Input } from "@/components/ui/input"
 
 export default function Header() {
   return (
@@ -25,17 +23,6 @@ export default function Header() {
             <h1 className="etna-text text-2xl font-bold text-white">
               Oh Canada Deals
             </h1>
-          </div>
-        </div>
-
-        <div className="md:flex md:w-1/3 lg:w-1/2">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search deals..."
-              className="w-full rounded-full border-muted-foreground/20 pl-10 pr-4"
-            />
           </div>
         </div>
       </div>
