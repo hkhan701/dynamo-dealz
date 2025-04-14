@@ -1,8 +1,8 @@
 import fs from "fs"
 import path from "path"
 
-import ProductCard from "@/components/product-card"
 import Header from "@/components/header"
+import ProductGrid from "@/components/product-grid"
 
 interface Product {
   name: string
@@ -17,6 +17,7 @@ interface Product {
   final_price: number
   hyperlink: string
   image_link: string
+  
 }
 
 interface ProductData {
@@ -25,26 +26,31 @@ interface ProductData {
 }
 
 export default async function Home() {
-  const filePath = path.join(process.cwd(), "public", "data", "Canada_garage_tools.json")
-  const fileContent = fs.readFileSync(filePath, "utf-8")
-  const jsonData: ProductData = JSON.parse(fileContent)
+  const dataFolderPath = path.join(process.cwd(), "public", "data");
+  const files = fs.readdirSync(dataFolderPath); // Get all files in the folder
 
-  const products = jsonData.products
-  const lastUpdated = new Date(jsonData.last_updated_time)
+  // Combine all products into a single array
+  const allProducts: (Product & { last_updated_time: string })[] = [];
+
+  files
+    .filter((file) => file.endsWith(".json")) // Only process JSON files
+    .forEach((file) => {
+      const filePath = path.join(dataFolderPath, file);
+      const fileContent = fs.readFileSync(filePath, "utf-8");
+      const jsonData: ProductData = JSON.parse(fileContent);
+
+      // Add products to the combined array, attaching their respective last_updated_time
+      const productsWithUpdatedTime = jsonData.products.map((product) => ({
+        ...product,
+        last_updated_time: jsonData.last_updated_time,
+      }));
+      allProducts.push(...productsWithUpdatedTime);
+    });
 
   return (
     <div className="min-h-screen">
       <Header />
-  
-      <main className="flex flex-col items-center justify-center px-4 py-8">
-        <div className="w-full max-w-screen-xl mx-auto">
-          <div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {products.map((product, index) => (
-              <ProductCard key={index} product={product} lastUpdated={lastUpdated} />
-            ))}
-          </div>
-        </div>
-      </main>
+      <ProductGrid products={allProducts} />
     </div>
   );
 }
