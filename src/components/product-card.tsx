@@ -5,7 +5,7 @@ import { Tag, ShoppingCart, Clock } from "lucide-react"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { cn, formatDistanceToNow } from "@/lib/utils"
+import { cn, formatDistanceToNow, getAffiliateLink } from "@/lib/utils"
 
 interface ProductCardProps {
   product: {
@@ -92,7 +92,7 @@ export default function ProductCard({ product, lastUpdated, className }: Product
 
       <CardFooter className="flex flex-col gap-3 p-4 pt-0">
         <Button asChild className="w-full gap-2">
-          <Link href={product.hyperlink} target="_blank" rel="noopener noreferrer">
+          <Link href={getAffiliateLink(product.hyperlink)} target="_blank" rel="noopener noreferrer">
             <ShoppingCart className="h-4 w-4" />
             View Deal
           </Link>

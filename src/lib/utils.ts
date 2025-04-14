@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getAffiliateLink(hyperlink: string, affiliateTag = "myaffil-20"): string {
+export function getAffiliateLink(hyperlink: string, affiliateTag = "ohcanadadeals06-20"): string {
   const url = new URL(hyperlink);
   url.searchParams.set("tag", affiliateTag); // Add or update the affiliate tag
   return url.toString();
