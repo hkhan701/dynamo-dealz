@@ -2,6 +2,10 @@
 
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { useEffect, RefObject } from "react"
+
+export const WEBSITE_URL = "https://ohcanadadeals.vercel.app/";
+export const SHARE_TEXT = "Check out the best Canadian deals right now! 🔥";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -43,4 +47,38 @@ export function formatDistanceToNow(date: Date): string {
 
   const diffInYears = Math.floor(diffInMonths / 12)
   return `${diffInYears} year${diffInYears !== 1 ? "s" : ""}`
+}
+
+export function buildShareUrl(platform: string, url: string, text: string): string {
+  const encodedUrl = encodeURIComponent(url);
+  const encodedText = encodeURIComponent(text);
+
+  switch (platform) {
+    case "facebook":
+      return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+    case "twitter":
+      return `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`;
+    case "whatsapp":
+      return `https://api.whatsapp.com/send?text=${encodedText} ${encodedUrl}`;
+    default:
+      return "";
+  }
+}
+
+export function useClickOutside(
+  ref: RefObject<HTMLElement | null>,
+  onClickOutside: () => void
+) {
+  useEffect(() => {
+    function handleClick(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        onClickOutside()
+      }
+    }
+
+    document.addEventListener("mousedown", handleClick)
+    return () => {
+      document.removeEventListener("mousedown", handleClick)
+    }
+  }, [ref, onClickOutside])
 }

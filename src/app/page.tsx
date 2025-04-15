@@ -17,7 +17,6 @@ interface Product {
   final_price: number
   hyperlink: string
   image_link: string
-  
 }
 
 interface ProductData {
@@ -46,6 +45,13 @@ export default async function Home() {
       }));
       allProducts.push(...productsWithUpdatedTime);
     });
+
+  // Sort products by last_updated_time in descending order
+  allProducts.sort((a, b) => {
+    const dateA = new Date(a.last_updated_time);
+    const dateB = new Date(b.last_updated_time);
+    return dateB.getTime() - dateA.getTime();
+  });
 
   return (
     <div className="min-h-screen">
