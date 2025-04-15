@@ -68,7 +68,7 @@ export default function ProductCard({ product, lastUpdated, className }: Product
         {/* Price information */}
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold">${product.final_price.toFixed(2)}</span>
-          {Number(product.percent_off_list_price) > 0 && (
+          {product.list_price && (
             <span className="text-sm text-muted-foreground line-through">${product.list_price.toFixed(2)}</span>
           )}
         </div>
