@@ -189,53 +189,58 @@ export default function ProductGrid({ products }: Props) {
 
         {/* Pagination Controls - Bottom */}
         {totalPages > 1 && (
-          <Pagination className="mt-8">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (currentPage > 1) handlePageChange(currentPage - 1)
-                  }}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                />
-              </PaginationItem>
-              
-              {getPageNumbers().map((page, index) => (
-                page === 'ellipsis-start' || page === 'ellipsis-end' ? (
-                  <PaginationItem key={`ellipsis-${index}`}>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                ) : (
-                  <PaginationItem key={`page-${page}`}>
-                    <PaginationLink 
-                      href="#" 
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handlePageChange(page as number)
-                      }}
-                      isActive={currentPage === page}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                )
-              ))}
-              
-              <PaginationItem>
-                <PaginationNext 
-                  href="#" 
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (currentPage < totalPages) handlePageChange(currentPage + 1)
-                  }}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
+  <Pagination className="mt-8 w-full overflow-x-auto">
+    <PaginationContent className="flex flex-wrap justify-center gap-1 text-sm">
+      {/* Previous */}
+      <PaginationItem>
+        <PaginationPrevious
+          href="#"
+          onClick={(e) => {
+            e.preventDefault()
+            if (currentPage > 1) handlePageChange(currentPage - 1)
+          }}
+          className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+        />
+      </PaginationItem>
+
+      {/* Page Numbers */}
+      {getPageNumbers().map((page, index) =>
+        page === "ellipsis-start" || page === "ellipsis-end" ? (
+          <PaginationItem key={`ellipsis-${index}`}>
+            <PaginationEllipsis />
+          </PaginationItem>
+        ) : (
+          <PaginationItem key={`page-${page}`}>
+            <PaginationLink
+              href="#"
+              onClick={(e) => {
+                e.preventDefault()
+                handlePageChange(page as number)
+              }}
+              isActive={currentPage === page}
+              className="min-w-8 text-center"
+            >
+              {page}
+            </PaginationLink>
+          </PaginationItem>
+        )
+      )}
+
+      {/* Next */}
+      <PaginationItem>
+        <PaginationNext
+          href="#"
+          onClick={(e) => {
+            e.preventDefault()
+            if (currentPage < totalPages) handlePageChange(currentPage + 1)
+          }}
+          className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+        />
+      </PaginationItem>
+    </PaginationContent>
+  </Pagination>
+)}
+
       </div>
     </main>
   )
