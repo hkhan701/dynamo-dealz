@@ -78,17 +78,18 @@ export default function Header() {
               </div>
             </button>
 
+            <button onClick={() => handleShare("whatsapp")} className="flex flex-col items-center hover:scale-110 transition-transform" title="Share on WhatsApp">
+              <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center">
+                <Image src="/whatsapp.svg" alt="WhatsApp Logo" width={20} height={20} className="invert" />
+              </div>
+            </button>
+
             <button onClick={() => handleShare("copy")} className="flex flex-col items-center hover:scale-110 transition-transform" title="Copy link">
               <div className="w-10 h-10 rounded-full bg-green-400 flex items-center justify-center">
                 <LinkIcon className="h-5 w-5 text-white" />
               </div>
             </button>
 
-            <button onClick={() => handleShare("whatsapp")} className="flex flex-col items-center hover:scale-110 transition-transform" title="Share on WhatsApp">
-              <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center">
-                <Image src="/whatsapp.svg" alt="WhatsApp Logo" width={20} height={20} className="invert" />
-              </div>
-            </button>
           </div>
         </div>
       </div>
