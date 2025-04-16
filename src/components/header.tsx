@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Share2, Facebook, Link as LinkIcon } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { buildShareUrl, WEBSITE_URL, SHARE_TEXT, useClickOutside } from "@/lib/utils"
+import { UI_MESSAGES } from "@/lib/strings"
 
 export default function Header() {
   const [showShareOptions, setShowShareOptions] = useState(false)
@@ -43,17 +44,17 @@ export default function Header() {
         {/* Logo and Title */}
         <div className="flex items-center gap-3">
           <div className="relative h-10 w-10 overflow-hidden rounded-full shadow-sm">
-            <Image src="/logo-png.png" alt="Logo" fill className="object-contain p-0.5 rounded-2xl" />
+            <Image src="/ohcanadadealslogo.png" alt="Logo" fill className="object-contain p-0.5 rounded-2xl" />
           </div>
           <div className="md:block mb-1">
-            <h1 className="etna-text text-2xl font-bold text-white">Oh Canada Deals</h1>
+            <h1 className="etna-text text-2xl font-bold text-white">{UI_MESSAGES.oHCanadaDeals}</h1>
           </div>
         </div>
 
         {/* Share Button */}
         <div className="relative" ref={shareOptionsRef}>
-          <button 
-            onClick={() => setShowShareOptions(prev => !prev)} 
+          <button
+            onClick={() => setShowShareOptions(prev => !prev)}
             className="p-2 rounded-full hover:bg-white/20 transition-colors"
             aria-label="Share"
           >
@@ -61,10 +62,9 @@ export default function Header() {
           </button>
 
           {/* Share Options */}
-          <div 
-            className={`absolute right-0 mt-2 p-3 bg-slate-100 rounded-lg shadow-lg z-50 flex gap-4 transform transition-all duration-200 ease-in-out ${
-              showShareOptions ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
-            }`}
+          <div
+            className={`absolute right-0 mt-2 p-3 bg-slate-100 rounded-lg shadow-lg z-50 flex gap-4 transform transition-all duration-200 ease-in-out ${showShareOptions ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+              }`}
           >
             <button onClick={() => handleShare("facebook")} className="flex flex-col items-center hover:scale-110 transition-transform" title="Share on Facebook">
               <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
@@ -95,12 +95,11 @@ export default function Header() {
       </div>
 
       {/* Copy Alert */}
-      <div className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md transition-all duration-300 ease-in-out ${
-        showCopiedAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
-      }`}>
+      <div className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md transition-all duration-300 ease-in-out ${showCopiedAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
+        }`}>
         <Alert className="bg-green-50 border-green-200 text-green-800">
           <AlertDescription className="flex items-center justify-center py-2">
-            <LinkIcon className="h-4 w-4 mr-2" /> Link copied to clipboard!
+            <LinkIcon className="h-4 w-4 mr-2" /> {UI_MESSAGES.linkCopied}
           </AlertDescription>
         </Alert>
       </div>

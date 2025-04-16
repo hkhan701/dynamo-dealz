@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="w-full border-t mt-12 px-4 py-6 text-sm text-gray-500 bg-white dark:bg-gray-900 dark:text-gray-400">
       <div className="max-w-screen-xl mx-auto flex flex-col items-center text-center space-y-4">
 
-        <Image src="/logo-png.png" alt="OhCanadaDeals Logo" width={60} height={20} className="rounded-2xl"/>
+        <Image src="/ohcanadadealslogo.png" alt="OhCanadaDeals Logo" width={60} height={20} className="rounded-2xl" />
 
         <p className="max-w-3xl text-xs leading-relaxed">
           <strong>Disclaimer:</strong><br />
