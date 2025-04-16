@@ -7,7 +7,7 @@ import { Tag, ShoppingCart, Clock } from "lucide-react"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { cn, formatDistanceToNow, getAffiliateLink } from "@/lib/utils"
+import { formatDistanceToNow, getAffiliateLink } from "@/lib/utils"
 
 interface ProductCardProps {
   product: {
@@ -25,10 +25,9 @@ interface ProductCardProps {
     image_link: string
   }
   lastUpdated: Date
-  className?: string
 }
 
-export default function ProductCard({ product, lastUpdated, className }: ProductCardProps) {
+export default function ProductCard({ product, lastUpdated }: ProductCardProps) {
   // Truncate product name for display
   const truncatedName = product.name.length > 80 ? `${product.name.substring(0, 80)}...` : product.name
 
@@ -36,7 +35,7 @@ export default function ProductCard({ product, lastUpdated, className }: Product
   const lastUpdatedRelative = formatDistanceToNow(lastUpdated)
 
   return (
-    <Card className={cn("overflow-hidden transition-all hover:shadow-md", className)}>
+    <Card className="overflow-hidden transition-all hover:shadow-md">
       <div className="relative">
         {/* Discount badge */}
         {Number(product.final_savings_percent) > 0 && (
