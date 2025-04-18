@@ -129,8 +129,8 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             variant="outline"
             size="icon"
             onClick={() => {
-              navigator.clipboard.writeText(getAffiliateLink(product.hyperlink));
-              setShowCopiedAlert(true);
+              navigator.clipboard.writeText(getAffiliateLink(product.hyperlink))
+              setShowCopiedAlert(true)
             }}
             className="h-10 w-full sm:w-10 flex items-center justify-center gap-2 text-sm"
           >
@@ -139,9 +139,10 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
           </Button>
         </div>
 
-        <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+        {/* Timestamp aligned left */}
+        <div className="flex w-full items-center gap-1 text-xs text-muted-foreground">
           <Clock className="h-3 w-3" />
-          <span>Last updated {lastUpdatedRelative} ago</span>
+          <span>Updated {lastUpdatedRelative} ago</span>
         </div>
       </CardFooter>
 
