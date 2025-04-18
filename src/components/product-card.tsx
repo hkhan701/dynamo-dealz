@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Tag, Clock, Star, Copy, ArrowUpRight, ArrowDown } from "lucide-react"
+import { Clock, Star, Copy, ArrowUpRight, ArrowDown } from "lucide-react"
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -42,14 +42,14 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
       <div className="relative">
         {/* Discount badge */}
         {Number(product.final_savings_percent) > 0 && (
-          <Badge className="absolute left-2 top-2 z-10 bg-red-600 hover:bg-red-700">
-            <ArrowDown className="mr-1 h-5 w-5" />
+          <Badge className="absolute left-2 top-2 z-10 bg-red-600 hover:bg-red-700 text-xs">
+            <ArrowDown className="mr-1 h-4 w-4" />
             {product.final_savings_percent}% price drop
           </Badge>
         )}
 
         {/* Product image */}
-        <div className="relative flex h-48 items-center justify-center bg-white p-4">
+        <div className="relative flex h-40 sm:h-48 items-center justify-center bg-white p-2 sm:p-4">
           <Image
             src={product.image_link}
             alt={product.name}
@@ -61,7 +61,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         </div>
       </div>
 
-      <CardContent className="grid gap-2 p-4">
+      <CardContent className="grid gap-2 p-3 sm:p-4">
         <h3 className="line-clamp-2 text-sm font-medium leading-tight" title={product.name}>
           {truncatedName}
         </h3>
@@ -80,7 +80,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         </div>
 
         {/* Price info */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between">
           <span className="text-lg font-bold">${product.final_price.toFixed(2)}</span>
           {product.list_price && (
             <span className="text-sm text-muted-foreground line-through">${product.list_price.toFixed(2)}</span>
@@ -106,8 +106,8 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         )}
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-3 p-4 pt-0">
-        <div className="flex w-full gap-2">
+      <CardFooter className="flex flex-col gap-3 p-3 sm:p-4 pt-0">
+        <div className="flex flex-wrap w-full gap-2">
           {/* View Deal Button */}
           <Button asChild className="flex-1 gap-2 group">
             <Link
@@ -116,7 +116,6 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2"
             >
-              <Tag className="h-4 w-4" />
               View Deal
               <ArrowUpRight
                 className="h-4 w-4 transform transition-transform duration-300 group-hover:rotate-45 group-hover:translate-x-1"
@@ -130,12 +129,13 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             variant="outline"
             size="icon"
             onClick={() => {
-              navigator.clipboard.writeText(getAffiliateLink(product.hyperlink))
-              setShowCopiedAlert(true)
+              navigator.clipboard.writeText(getAffiliateLink(product.hyperlink));
+              setShowCopiedAlert(true);
             }}
-            className="h-10 w-10"
+            className="h-10 w-full sm:w-10 flex items-center justify-center gap-2 text-sm"
           >
             <Copy className="h-4 w-4" />
+            <span className="block sm:hidden">Copy Link</span>
           </Button>
         </div>
 

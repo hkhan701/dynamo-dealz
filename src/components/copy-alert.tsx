@@ -19,11 +19,11 @@ export default function CopyAlert({ show, onDismiss, message }: CopyAlertProps) 
 
   return (
     <div
-      className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md transition-all duration-300 ease-in-out ${show ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+      className={`fixed top-4 right-4 z-50 w-64 max-w-full transition-all duration-300 ease-in-out ${show ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
     >
-      <Alert className="bg-green-50 border-green-200 text-green-800">
-        <AlertDescription className="flex items-center justify-center py-2">
+      <Alert className="bg-green-50 border-green-200 text-green-800 shadow-md rounded-lg">
+        <AlertDescription className="flex items-center justify-center py-2 text-sm">
           <LinkIcon className="h-4 w-4 mr-2" />
           {message}
         </AlertDescription>
