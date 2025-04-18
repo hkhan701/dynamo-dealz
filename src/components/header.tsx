@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import Image from "next/image"
 import { Share2, Facebook, Link as LinkIcon } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
 import { buildShareUrl, WEBSITE_URL, SHARE_TEXT, useClickOutside } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
+import CopyAlert from "@/components/copy-alert"
 
 export default function Header() {
   const [showShareOptions, setShowShareOptions] = useState(false)
@@ -14,13 +14,6 @@ export default function Header() {
 
   // Detect click outside share dock
   useClickOutside(shareOptionsRef, () => setShowShareOptions(false))
-
-  // Automatically dismiss copied alert
-  useEffect(() => {
-    if (!showCopiedAlert) return
-    const timer = setTimeout(() => setShowCopiedAlert(false), 3000)
-    return () => clearTimeout(timer)
-  }, [showCopiedAlert])
 
   const handleShare = (platform: string) => {
     if (platform === "copy") {
@@ -95,14 +88,11 @@ export default function Header() {
       </div>
 
       {/* Copy Alert */}
-      <div className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md transition-all duration-300 ease-in-out ${showCopiedAlert ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
-        }`}>
-        <Alert className="bg-green-50 border-green-200 text-green-800">
-          <AlertDescription className="flex items-center justify-center py-2">
-            <LinkIcon className="h-4 w-4 mr-2" /> {UI_MESSAGES.linkCopied}
-          </AlertDescription>
-        </Alert>
-      </div>
+      <CopyAlert
+        show={showCopiedAlert}
+        onDismiss={() => setShowCopiedAlert(false)}
+        message={UI_MESSAGES.linkCopied}
+      />
     </header>
   )
 }

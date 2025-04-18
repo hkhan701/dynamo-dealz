@@ -12,6 +12,8 @@ export interface Product {
   hyperlink: string
   image_link: string
   last_updated_time: string
+  rating: number
+  rating_count: number
 }
 
 export interface ProductData {
