@@ -109,7 +109,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
       <CardFooter className="flex flex-col gap-3 p-3 sm:p-4 pt-0">
         <div className="flex flex-wrap w-full gap-2">
           {/* View Deal Button */}
-          <Button asChild className="flex-1 gap-2 group">
+          <Button asChild className="flex-1 gap-2 group bg-leaf-background hover:bg-leaf-background/80 text-white">
             <Link
               href={getAffiliateLink(product.hyperlink)}
               target="_blank"

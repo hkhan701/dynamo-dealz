@@ -39,7 +39,7 @@ export default function Footer() {
                 disabled
               />
               <Button
-                className="bg-slate-600 text-white"
+                className="bg-leaf-background hover:bg-leaf-background/80 text-white"
                 disabled
               >
                 Subscribe

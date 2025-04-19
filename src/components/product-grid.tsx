@@ -6,15 +6,7 @@ import ProductCard from "@/components/product-card"
 import { Input } from "./ui/input"
 import { Loader2, PackageSearch, Search } from "lucide-react"
 import { UI_MESSAGES } from "@/lib/strings"
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious
-} from "@/components/ui/pagination"
+
 import {
   Select,
   SelectContent,
@@ -23,19 +15,17 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { Product } from "@/types/product"
+import { Button } from "./ui/button"
 
 interface Props {
   products: Product[]
 }
 
 export default function ProductGrid({ products }: Props) {
+  // ========== SEARCH LOGIC ==========
   const [query, setQuery] = useState("")
-  const [results, setResults] = useState<Product[]>([])
+  const [searchResults, setSearchResults] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(12)
 
   // Setup Fuse instance with config
   const fuse = useMemo(() => {
@@ -51,28 +41,31 @@ export default function ProductGrid({ products }: Props) {
   useEffect(() => {
     setIsLoading(true)
     if (query.trim() === "") {
-      setResults(products)
+      setSearchResults(products)
     } else {
       const fuseResults = fuse.search(query)
-      setResults(fuseResults.map(res => res.item))
+      setSearchResults(fuseResults.map(res => res.item))
     }
     setIsLoading(false)
     // Reset to first page when search query changes
     setCurrentPage(1)
   }, [query, fuse, products])
 
+  // ========== PAGINATION LOGIC ==========
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(12)
+
   // Calculate pagination
-  const totalItems = results.length
+  const totalItems = searchResults.length
   const totalPages = Math.ceil(totalItems / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems)
-  const currentItems = results.slice(startIndex, endIndex)
+  const currentItems = searchResults.slice(startIndex, endIndex)
 
   // Handle page changes
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    // Scroll to top of grid when page changes
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   // Generate page numbers for pagination
@@ -116,50 +109,130 @@ export default function ProductGrid({ products }: Props) {
     return pageNumbers
   }
 
+  // ========== FILTER LOGIC ==========
+  // Add your filter logic here in the future
+  // const [activeFilters, setActiveFilters] = useState([])
+  // const applyFilters = (items) => {
+  //   // Filter logic here
+  //   return items
+  // }
+
+  // ========== PAGINATION UI COMPONENT ==========
+  const PaginationControls = () => {
+    return (
+      <>
+        {totalPages > 1 && (
+          <div className="flex flex-wrap items-center justify-between mt-6 bg-white p-4 rounded-lg border border-slate-200 shadow-sm w-full max-w-xl mx-auto gap-3">
+            {/* Previous Button */}
+            <Button
+              variant="outline"
+              className="text-slate-600"
+              disabled={currentPage === 1}
+              onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+            >
+              Previous
+            </Button>
+
+            {/* Page Number Buttons */}
+            <div className="flex items-center gap-1">
+              {getPageNumbers().map((page, index) =>
+                page === "ellipsis-start" || page === "ellipsis-end" ? (
+                  <span
+                    key={`ellipsis-${index}`}
+                    className="text-slate-500 px-1"
+                  >
+                    ...
+                  </span>
+                ) : (
+                  <Button
+                    key={`page-${page}`}
+                    variant="outline"
+                    className={`h-8 w-8 p-0 text-sm ${currentPage === page
+                      ? "bg-red-50 text-red-600 border-red-200"
+                      : "text-slate-600"
+                      }`}
+                    onClick={() => handlePageChange(page as number)}
+                  >
+                    {page}
+                  </Button>
+                )
+              )}
+            </div>
+
+            {/* Next Button */}
+            <Button
+              variant="outline"
+              className="text-slate-600"
+              disabled={currentPage === totalPages}
+              onClick={() =>
+                currentPage < totalPages && handlePageChange(currentPage + 1)
+              }
+            >
+              Next
+            </Button>
+          </div>
+        )}
+      </>
+    )
+  }
+
+  // ========== MAIN RENDER ==========
   return (
     <main className="flex flex-col items-center justify-center px-4 py-8">
       <div className="w-full max-w-screen-xl mx-auto">
-        {/* Search Bar */}
-        <div className="w-full max-w-lg mx-auto mb-8">
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder={UI_MESSAGES.searchPlaceholder}
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              className="w-full rounded-full pl-12 pr-4 py-2 shadow-sm border border-muted-foreground/20 focus-visible:ring-2 focus-visible:ring-ring"
-            />
+
+
+        {/* Items per page selector */}
+        <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm mb-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            {/* Search Bar */}
+            <div className="w-full sm:w-1/2 max-w-lg mx-auto sm:mx-0">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder={UI_MESSAGES.searchPlaceholder}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="w-full rounded-full pl-12 pr-4 py-2 shadow-sm border border-muted-foreground/20 focus-visible:ring-2 focus-visible:ring-ring"
+                />
+              </div>
+            </div>
+
+            {/* Info + Selector Group */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end sm:gap-6 w-full sm:w-1/2">
+              {/* Showing Count */}
+              <div className="flex items-center justify-center sm:justify-end">
+                <span className="text-sm text-slate-500">
+                  Showing {startIndex + 1}-{endIndex} of {totalItems} products
+                </span>
+              </div>
+
+              {/* Items per Page */}
+              <div className="flex items-center justify-center sm:justify-end gap-2">
+                <span className="text-sm text-slate-600">Items per page:</span>
+                <Select
+                  value={itemsPerPage.toString()}
+                  onValueChange={(value) => {
+                    setItemsPerPage(Number(value))
+                    setCurrentPage(1)
+                  }}
+                >
+                  <SelectTrigger className="w-[80px]">
+                    <SelectValue placeholder="12" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="12">12</SelectItem>
+                    <SelectItem value="24">24</SelectItem>
+                    <SelectItem value="48">48</SelectItem>
+                    <SelectItem value="96">96</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Pagination Controls - Top */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-          <div className="text-sm text-muted-foreground mb-4 sm:mb-0">
-            Showing {startIndex + 1}-{endIndex} of {totalItems} items
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Items per page:</span>
-            <Select
-              value={itemsPerPage.toString()}
-              onValueChange={(value) => {
-                setItemsPerPage(Number(value))
-                setCurrentPage(1)
-              }}
-            >
-              <SelectTrigger className="w-16 h-8">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="12">12</SelectItem>
-                <SelectItem value="24">24</SelectItem>
-                <SelectItem value="48">48</SelectItem>
-                <SelectItem value="96">96</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
 
         {/* Product Grid */}
         <div className="grid w-full grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -179,78 +252,15 @@ export default function ProductGrid({ products }: Props) {
               {UI_MESSAGES.loadingDeals}
             </span>
           </div>
-        ) : results.length === 0 ? (
+        ) : searchResults.length === 0 ? (
           <div className="flex flex-col justify-center items-center mt-8 text-muted-foreground gap-2 text-sm sm:text-base">
             <PackageSearch className="h-10 w-10" />
             <p>{UI_MESSAGES.noDealsFound}</p>
           </div>
         ) : null}
 
-        {/* Pagination Controls - Bottom */}
-        {totalPages > 1 && (
-          <Pagination className="mt-10 w-full">
-            <PaginationContent className="flex w-full flex-wrap items-center justify-center gap-2 px-2 overflow-x-auto sm:gap-1">
-
-              {/* Previous */}
-              <PaginationItem>
-                <PaginationPrevious
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (currentPage > 1) handlePageChange(currentPage - 1)
-                  }}
-                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${currentPage === 1
-                    ? "pointer-events-none bg-slate-200 text-slate-400"
-                    : "bg-white hover:bg-slate-100 text-slate-700 shadow-sm"
-                    }`}
-                />
-              </PaginationItem>
-
-              {/* Page Numbers */}
-              {getPageNumbers().map((page, index) =>
-                page === "ellipsis-start" || page === "ellipsis-end" ? (
-                  <PaginationItem key={`ellipsis-${index}`}>
-                    <PaginationEllipsis className="text-slate-400" />
-                  </PaginationItem>
-                ) : (
-                  <PaginationItem key={`page-${page}`}>
-                    <PaginationLink
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        handlePageChange(page as number)
-                      }}
-                      isActive={currentPage === page}
-                      className={`min-w-[2.5rem] rounded-md px-3 py-1.5 text-center text-sm font-medium transition-all hover:bg-leaf-background ${currentPage === page
-                        ? "bg-leaf-red text-white shadow "
-                        : "bg-white text-slate-700 shadow-sm"
-                        }`}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                )
-              )}
-
-              {/* Next */}
-              <PaginationItem>
-                <PaginationNext
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (currentPage < totalPages) handlePageChange(currentPage + 1)
-                  }}
-                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${currentPage === totalPages
-                    ? "pointer-events-none bg-slate-200 text-slate-400"
-                    : "bg-white hover:bg-slate-100 text-slate-700 shadow-sm"
-                    }`}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        )}
-
-
+        {/* Bottom Pagination */}
+        <PaginationControls />
       </div>
     </main>
   )

@@ -5,7 +5,7 @@ import "./globals.css";
 import Footer from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react"
 
-const Etna = localFont({ 
+const Etna = localFont({
   src: './etna.otf',
   variable: '--font-etna'
 });
