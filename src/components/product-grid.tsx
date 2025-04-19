@@ -188,8 +188,9 @@ export default function ProductGrid({ products }: Props) {
 
         {/* Pagination Controls - Bottom */}
         {totalPages > 1 && (
-          <Pagination className="mt-8 w-full overflow-x-auto">
-            <PaginationContent className="flex flex-wrap justify-center gap-1 text-sm">
+          <Pagination className="mt-10 w-full">
+            <PaginationContent className="flex w-full flex-wrap items-center justify-center gap-2 px-2 overflow-x-auto sm:gap-1">
+
               {/* Previous */}
               <PaginationItem>
                 <PaginationPrevious
@@ -198,7 +199,10 @@ export default function ProductGrid({ products }: Props) {
                     e.preventDefault()
                     if (currentPage > 1) handlePageChange(currentPage - 1)
                   }}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${currentPage === 1
+                    ? "pointer-events-none bg-slate-200 text-slate-400"
+                    : "bg-white hover:bg-slate-100 text-slate-700 shadow-sm"
+                    }`}
                 />
               </PaginationItem>
 
@@ -206,7 +210,7 @@ export default function ProductGrid({ products }: Props) {
               {getPageNumbers().map((page, index) =>
                 page === "ellipsis-start" || page === "ellipsis-end" ? (
                   <PaginationItem key={`ellipsis-${index}`}>
-                    <PaginationEllipsis />
+                    <PaginationEllipsis className="text-slate-400" />
                   </PaginationItem>
                 ) : (
                   <PaginationItem key={`page-${page}`}>
@@ -217,7 +221,10 @@ export default function ProductGrid({ products }: Props) {
                         handlePageChange(page as number)
                       }}
                       isActive={currentPage === page}
-                      className="min-w-8 text-center"
+                      className={`min-w-[2.5rem] rounded-md px-3 py-1.5 text-center text-sm font-medium transition-all hover:bg-leaf-background ${currentPage === page
+                        ? "bg-leaf-red text-white shadow "
+                        : "bg-white text-slate-700 shadow-sm"
+                        }`}
                     >
                       {page}
                     </PaginationLink>
@@ -233,12 +240,16 @@ export default function ProductGrid({ products }: Props) {
                     e.preventDefault()
                     if (currentPage < totalPages) handlePageChange(currentPage + 1)
                   }}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${currentPage === totalPages
+                    ? "pointer-events-none bg-slate-200 text-slate-400"
+                    : "bg-white hover:bg-slate-100 text-slate-700 shadow-sm"
+                    }`}
                 />
               </PaginationItem>
             </PaginationContent>
           </Pagination>
         )}
+
 
       </div>
     </main>
