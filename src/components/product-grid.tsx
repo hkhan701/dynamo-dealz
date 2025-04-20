@@ -161,7 +161,7 @@ export default function ProductGrid({ products }: Props) {
       {/* Minimum Discount */}
       <div className="space-y-3 pt-2 border-t border-slate-100">
         <div className="flex items-center justify-between">
-          <h5 className="font-medium text-sm text-slate-600">Discount</h5>
+          <h5 className="font-medium text-sm text-slate-600">Minimum Discount</h5>
           {filters.minDiscount > 0 && (
             <span className="text-xs font-medium px-2 py-1 bg-green-50 text-green-600 rounded-full">
               {filters.minDiscount}% or more

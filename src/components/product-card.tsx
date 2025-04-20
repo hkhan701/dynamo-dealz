@@ -67,23 +67,25 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         </h3>
 
         {/* Rating */}
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-xs">
           {product.rating && product.rating_count > 0 ? (
             <>
-              <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-              <span className="font-medium text-foreground">{product.rating.toFixed(1)}</span>
-              <span>({product.rating_count})</span>
+              <div className="flex items-center bg-amber-50 px-2 py-1 rounded-full">
+                <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400 mr-1" />
+                <span className="font-semibold text-amber-700">{product.rating.toFixed(1)}</span>
+              </div>
+              <span className="text-muted-foreground" title="Number of Ratings">({product.rating_count.toLocaleString()})</span>
             </>
           ) : (
-            <span className="text-muted-foreground">No Ratings</span>
+            <span className="text-muted-foreground italic">No Ratings</span>
           )}
         </div>
 
         {/* Price info */}
-        <div className="flex flex-wrap items-center justify-between">
-          <span className="text-lg font-bold">${product.final_price.toFixed(2)}</span>
-          {product.list_price && (
-            <span className="text-sm text-muted-foreground line-through">${product.list_price.toFixed(2)}</span>
+        <div className="flex items-end gap-2 mt-1">
+          <span className="text-xl font-bold text-primary">${product.final_price.toFixed(2)}</span>
+          {product.list_price > 0 && (
+            <span className="text-sm text-muted-foreground line-through mb-0.5">${product.list_price.toFixed(2)}</span>
           )}
         </div>
 
