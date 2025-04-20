@@ -53,8 +53,8 @@ export default function ProductGrid({ products }: Props) {
     minDiscount: 0,
     sortBy: 'newest',
     specialOffers: {
-      coupon: true,
-      promoCode: true,
+      coupon: false,
+      promoCode: false,
     },
   })
 
@@ -147,8 +147,8 @@ export default function ProductGrid({ products }: Props) {
       minDiscount: 0,
       sortBy: 'newest',
       specialOffers: {
-        coupon: true,
-        promoCode: true,
+        coupon: false,
+        promoCode: false,
       },
     })
     setCurrentPage(1)
