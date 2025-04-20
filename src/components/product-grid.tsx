@@ -1,12 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import Fuse from "fuse.js"
 import ProductCard from "@/components/product-card"
-import { Input } from "./ui/input"
-import { Loader2, PackageSearch, Search } from "lucide-react"
-import { UI_MESSAGES } from "@/lib/strings"
-
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
@@ -14,253 +12,343 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import {
+  Sheet,
+  SheetContent,
+} from "@/components/ui/sheet"
+import { Loader2, PackageSearch, Search, Filter } from "lucide-react"
+import { UI_MESSAGES } from "@/lib/strings"
 import { Product } from "@/types/product"
-import { Button } from "./ui/button"
+import { getPageNumbers } from "@/lib/utils"
+import { DialogTitle } from "@radix-ui/react-dialog"
 
 interface Props {
   products: Product[]
 }
 
-export default function ProductGrid({ products }: Props) {
-  // ========== SEARCH LOGIC ==========
-  const [query, setQuery] = useState("")
-  const [searchResults, setSearchResults] = useState<Product[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+interface FilterState {
+  priceRange: [number, number];
+  minDiscount: number;
+}
 
-  // Setup Fuse instance with config
+export default function ProductGrid({ products }: Props) {
+  const [query, setQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<Product[]>(products)
+  const [filteredResults, setFilteredResults] = useState<Product[]>(products)
+  const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(12)
+  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
+
+  // Enhanced filter state
+  const [filters, setFilters] = useState<FilterState>({
+    priceRange: [0, 9999],
+    minDiscount: 0,
+  })
+
   const fuse = useMemo(() => {
     return new Fuse(products, {
-      keys: ['name'],         // Search on product name
-      threshold: 0.3,         // Lower = stricter (0 = exact match, 1 = match all)
-      ignoreLocation: true,   // Better for large text
-      minMatchCharLength: 2,  // Helps skip 1-letter matches
+      keys: ['name'],
+      threshold: 0.3,
+      ignoreLocation: true,
+      minMatchCharLength: 2,
     })
   }, [products])
 
   // Run search when query changes
   useEffect(() => {
     setIsLoading(true)
+
     if (query.trim() === "") {
       setSearchResults(products)
     } else {
       const fuseResults = fuse.search(query)
-      setSearchResults(fuseResults.map(res => res.item))
+      setSearchResults(fuseResults.map((res) => res.item))
     }
-    setIsLoading(false)
+
     // Reset to first page when search query changes
     setCurrentPage(1)
+    setIsLoading(false)
   }, [query, fuse, products])
 
-  // ========== PAGINATION LOGIC ==========
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(12)
+  // Apply filters to search results
+  useEffect(() => {
+    setIsLoading(true)
+    let result = [...searchResults]
 
-  // Calculate pagination
-  const totalItems = searchResults.length
+    // Filter by price range
+    result = result.filter(
+      (product) => product.final_price >= filters.priceRange[0] && product.final_price <= filters.priceRange[1]
+    )
+
+    // Filter by minimum discount
+    if (filters.minDiscount > 0) {
+      result = result.filter((product) => product.final_savings_percent >= filters.minDiscount)
+    }
+
+
+    setFilteredResults(result)
+    setIsLoading(false)
+  }, [filters, searchResults])
+
+  const totalItems = filteredResults.length
   const totalPages = Math.ceil(totalItems / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems)
-  const currentItems = searchResults.slice(startIndex, endIndex)
+  const currentItems = filteredResults.slice(startIndex, endIndex)
 
-  // Handle page changes
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-  }
+  const handlePageChange = (page: number) => setCurrentPage(page)
 
-  // Generate page numbers for pagination
-  const getPageNumbers = () => {
-    const pageNumbers = []
+  const clearFilters = useCallback(() => {
+    setFilters({
+      priceRange: [0, 9999],
+      minDiscount: 0
+    })
+    setCurrentPage(1)
+    setIsFilterSheetOpen(false)
+  }, [])
 
-    // Always show first page
-    pageNumbers.push(1)
+  const FilterComponent = useMemo(() => (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="font-bold text-slate-700 flex items-center gap-2">
+          <Filter className="h-5 w-5" />
+          Filters
+        </h4>
+      </div>
 
-    // Calculate range of pages to display around current page
-    let rangeStart = Math.max(2, currentPage - 1)
-    let rangeEnd = Math.min(totalPages - 1, currentPage + 1)
+      {/* Price Range */}
+      <div className="space-y-2">
+        <h5 className="font-medium text-sm text-slate-600">Price Range</h5>
+        <div className="flex items-center gap-2 mb-2">
+          <Input
+            placeholder="Min"
+            type="number"
+            inputMode="numeric"
+            value={filters.priceRange[0].toString()}
+            onChange={(e) => {
+              const raw = e.target.value
+              const cleaned = raw.replace(/^0+(?!$)/, "") // removes leading zeros
+              const num = cleaned === "" ? 0 : Number(cleaned)
+              setFilters((prev) => ({
+                ...prev,
+                priceRange: [num, prev.priceRange[1]],
+              }))
+            }}
+            className="w-24"
+          />
+          <span>-</span>
+          <Input
+            placeholder="Max"
+            type="number"
+            inputMode="numeric"
+            value={filters.priceRange[1].toString()}
+            onChange={(e) => {
+              const raw = e.target.value
+              const cleaned = raw.replace(/^0+(?!$)/, "") // removes leading zeros
+              const num = cleaned === "" ? 0 : Number(cleaned)
+              setFilters((prev) => ({
+                ...prev,
+                priceRange: [prev.priceRange[0], num],
+              }))
+            }}
+            className="w-24"
+          />
 
-    // Adjust range if at edges
-    if (currentPage <= 2) {
-      rangeEnd = Math.min(4, totalPages - 1)
-    } else if (currentPage >= totalPages - 1) {
-      rangeStart = Math.max(2, totalPages - 3)
-    }
+        </div>
+      </div>
 
-    // Add ellipsis before range if needed
-    if (rangeStart > 2) {
-      pageNumbers.push('ellipsis-start')
-    }
-
-    // Add page numbers in range
-    for (let i = rangeStart; i <= rangeEnd; i++) {
-      pageNumbers.push(i)
-    }
-
-    // Add ellipsis after range if needed
-    if (rangeEnd < totalPages - 1) {
-      pageNumbers.push('ellipsis-end')
-    }
-
-    // Always show last page if there is more than one page
-    if (totalPages > 1) {
-      pageNumbers.push(totalPages)
-    }
-
-    return pageNumbers
-  }
-
-  // ========== FILTER LOGIC ==========
-  // Add your filter logic here in the future
-  // const [activeFilters, setActiveFilters] = useState([])
-  // const applyFilters = (items) => {
-  //   // Filter logic here
-  //   return items
-  // }
-
-  // ========== PAGINATION UI COMPONENT ==========
-  const PaginationControls = () => {
-    return (
-      <>
-        {totalPages > 1 && (
-          <div className="flex flex-wrap items-center justify-between mt-6 bg-white p-4 rounded-lg border border-slate-200 shadow-sm w-full max-w-xl mx-auto gap-3">
-            {/* Previous Button */}
-            <Button
-              variant="outline"
-              className="text-slate-600"
-              disabled={currentPage === 1}
-              onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-            >
-              Previous
-            </Button>
-
-            {/* Page Number Buttons */}
-            <div className="flex items-center gap-1">
-              {getPageNumbers().map((page, index) =>
-                page === "ellipsis-start" || page === "ellipsis-end" ? (
-                  <span
-                    key={`ellipsis-${index}`}
-                    className="text-slate-500 px-1"
-                  >
-                    ...
-                  </span>
-                ) : (
-                  <Button
-                    key={`page-${page}`}
-                    variant="outline"
-                    className={`h-8 w-8 p-0 text-sm ${currentPage === page
-                      ? "bg-red-50 text-red-600 border-red-200"
-                      : "text-slate-600"
-                      }`}
-                    onClick={() => handlePageChange(page as number)}
-                  >
-                    {page}
-                  </Button>
-                )
-              )}
-            </div>
-
-            {/* Next Button */}
-            <Button
-              variant="outline"
-              className="text-slate-600"
-              disabled={currentPage === totalPages}
-              onClick={() =>
-                currentPage < totalPages && handlePageChange(currentPage + 1)
-              }
-            >
-              Next
-            </Button>
-          </div>
-        )}
-      </>
-    )
-  }
-
-  // ========== MAIN RENDER ==========
-  return (
-    <main className="flex flex-col items-center justify-center px-4 py-8">
-      <div className="w-full max-w-screen-xl mx-auto">
-
-
-        {/* Items per page selector */}
-        <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm mb-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            {/* Search Bar */}
-            <div className="w-full sm:w-1/2 max-w-lg mx-auto sm:mx-0">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder={UI_MESSAGES.searchPlaceholder}
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="w-full rounded-full pl-12 pr-4 py-2 shadow-sm border border-muted-foreground/20 focus-visible:ring-2 focus-visible:ring-ring"
-                />
-              </div>
-            </div>
-
-            {/* Info + Selector Group */}
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end sm:gap-6 w-full sm:w-1/2">
-              {/* Showing Count */}
-              <div className="flex items-center justify-center sm:justify-end">
-                <span className="text-sm text-slate-500">
-                  Showing {startIndex + 1}-{endIndex} of {totalItems} products
-                </span>
-              </div>
-
-              {/* Items per Page */}
-              <div className="flex items-center justify-center sm:justify-end gap-2">
-                <span className="text-sm text-slate-600">Items per page:</span>
-                <Select
-                  value={itemsPerPage.toString()}
-                  onValueChange={(value) => {
-                    setItemsPerPage(Number(value))
-                    setCurrentPage(1)
-                  }}
-                >
-                  <SelectTrigger className="w-[80px]">
-                    <SelectValue placeholder="12" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="12">12</SelectItem>
-                    <SelectItem value="24">24</SelectItem>
-                    <SelectItem value="48">48</SelectItem>
-                    <SelectItem value="96">96</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          </div>
+      {/* Minimum Discount */}
+      <div className="space-y-3 pt-2 border-t border-slate-100">
+        <div className="flex items-center justify-between">
+          <h5 className="font-medium text-sm text-slate-600">Discount</h5>
+          {filters.minDiscount > 0 && (
+            <span className="text-xs font-medium px-2 py-1 bg-green-50 text-green-600 rounded-full">
+              {filters.minDiscount}% or more
+            </span>
+          )}
         </div>
 
-
-        {/* Product Grid */}
-        <div className="grid w-full grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {currentItems.map((product, index) => (
-            <ProductCard
-              key={`${product.asin}-${index}`}
-              product={product}
-              lastUpdated={new Date(product.last_updated_time)}
-            />
+        <div className="grid grid-cols-5 gap-2">
+          {[0, 10, 25, 50, 70].map((discount) => (
+            <Button
+              key={discount}
+              variant={filters.minDiscount === discount ? "default" : "outline"}
+              className={`h-9 px-2 text-xs ${filters.minDiscount === discount ? "bg-leaf-background text-white" : "text-slate-600"
+                }`}
+              onClick={() => setFilters((prev) => ({ ...prev, minDiscount: discount }))}
+            >
+              {discount === 0 ? "Any" : `${discount}%+`}
+            </Button>
           ))}
         </div>
 
-        {isLoading ? (
-          <div className="flex flex-col justify-center items-center mt-8 text-muted-foreground gap-3 text-sm sm:text-base">
-            <Loader2 className="animate-spin h-10 w-10" />
-            <span className="flex items-center gap-1">
-              {UI_MESSAGES.loadingDeals}
-            </span>
-          </div>
-        ) : searchResults.length === 0 ? (
-          <div className="flex flex-col justify-center items-center mt-8 text-muted-foreground gap-2 text-sm sm:text-base">
-            <PackageSearch className="h-10 w-10" />
-            <p>{UI_MESSAGES.noDealsFound}</p>
-          </div>
-        ) : null}
+        {/* Custom discount input */}
+        <div className="flex items-center gap-2">
+          <Input
+            type="number"
+            placeholder="Custom %"
+            value={[0, 10, 25, 50, 70].includes(filters.minDiscount) ? "" : filters.minDiscount}
+            onChange={(e) => {
+              const value = Number(e.target.value)
+              if (!isNaN(value) && value >= 0 && value <= 100) {
+                setFilters((prev) => ({
+                  ...prev,
+                  minDiscount: value,
+                }))
+              }
+            }}
+            className="h-9"
+          />
+        </div>
+      </div>
 
-        {/* Bottom Pagination */}
-        <PaginationControls />
+      <div className="flex gap-2 mt-2">
+        <Button className="flex-1 bg-leaf-background text-white" onClick={clearFilters}>
+          Reset Filters
+        </Button>
+      </div>
+    </div>
+  ), [filters, clearFilters])
+
+  const PaginationControls = () => (
+    totalPages > 1 && (
+      <div className="flex flex-wrap items-center justify-between mt-6 bg-white p-4 rounded-lg border border-slate-200 shadow-sm w-full max-w-xl mx-auto gap-3">
+        <Button variant="outline" className="text-slate-600" disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
+          Previous
+        </Button>
+        <div className="flex items-center gap-1">
+          {getPageNumbers(currentPage, totalPages).map((page, index) =>
+            typeof page === "string" ? (
+              <span key={`ellipsis-${index}`} className="text-slate-500 px-1">...</span>
+            ) : (
+              <Button
+                key={`page-${page}`}
+                variant="outline"
+                className={`h-8 w-8 p-0 text-sm ${currentPage === page ? "bg-red-50 text-red-600 border-red-200" : "text-slate-600"}`}
+                onClick={() => handlePageChange(page)}
+              >
+                {page}
+              </Button>
+            )
+          )}
+        </div>
+        <Button variant="outline" className="text-slate-600" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
+          Next
+        </Button>
+      </div>
+    )
+  )
+
+  return (
+    <main className="flex flex-col items-center justify-center px-4 py-8">
+      <div className="w-full max-w-screen-2xl mx-auto">
+
+        <div className="grid grid-cols-1 md:grid-cols-[275px_1fr] gap-6 mb-6">
+
+          {/* Filter Sidebar */}
+          <div className="hidden md:flex flex-col h-[500px] bg-white p-4 border border-slate-200 rounded-lg shadow-sm">
+            {FilterComponent}
+          </div>
+
+          {/* Main Content */}
+          <div className="flex flex-col gap-4">
+
+            <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+              {/* Mobile Filter Button */}
+              <div className="flex md:hidden justify-between">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsFilterSheetOpen(true)}
+                  className="flex items-center gap-2 w-full justify-center"
+                >
+                  <Filter className="h-4 w-4" />
+                  Filters
+                </Button>
+              </div>
+
+              {/* Status + Controls */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4 sm:gap-6">
+
+                {/* Showing Text */}
+                <div className="text-sm text-slate-500 text-center sm:text-left w-full sm:w-auto">
+                  Showing <span className="font-medium text-slate-700">{startIndex + 1}-{endIndex}</span> of{" "}
+                  <span className="font-medium text-slate-700">{totalItems}</span> products
+                </div>
+
+                {/* Items per page selector */}
+                <div className="flex items-center justify-center sm:justify-end gap-2 w-full sm:w-auto">
+                  <span className="text-sm text-slate-600 whitespace-nowrap">Items per page:</span>
+                  <Select
+                    value={itemsPerPage.toString()}
+                    onValueChange={(v) => {
+                      setItemsPerPage(Number(v));
+                      setCurrentPage(1);
+                    }}
+                  >
+                    <SelectTrigger className="w-[80px]">
+                      <SelectValue placeholder="12" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="12">12</SelectItem>
+                      <SelectItem value="24">24</SelectItem>
+                      <SelectItem value="48">48</SelectItem>
+                      <SelectItem value="96">96</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+              </div>
+            </div>
+
+
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder={UI_MESSAGES.searchPlaceholder}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full rounded-full pl-12 pr-4 py-2 shadow-sm border border-muted-foreground/20 focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {isLoading ? (
+                <div className="col-span-full flex flex-col justify-center items-center mt-8 text-muted-foreground gap-3 text-sm sm:text-base min-h-[200px]">
+                  <Loader2 className="animate-spin h-10 w-10" />
+                  <span>{UI_MESSAGES.loadingDeals}</span>
+                </div>
+              ) : searchResults.length === 0 ? (
+                <div className="col-span-full flex flex-col justify-center items-center mt-8 text-muted-foreground gap-2 text-sm sm:text-base min-h-[200px]">
+                  <PackageSearch className="h-10 w-10" />
+                  <p>{UI_MESSAGES.noDealsFound}</p>
+                </div>
+              ) : (currentItems.map((product, index) => (
+                <ProductCard key={`${product.asin}-${index}`} product={product} lastUpdated={new Date(product.last_updated_time)} />
+              )))}
+
+              {filteredResults.length === 0 ? (
+                <div className="col-span-full flex flex-col justify-center items-center mt-8 text-muted-foreground gap-2 text-sm sm:text-base min-h-[200px]">
+                  <PackageSearch className="h-10 w-10" />
+                  <p>None of the available deals match your filters, try resetting your filters.</p>
+                  <Button variant="outline" onClick={clearFilters} className="mt-2">Reset Filters</Button>
+                </div>
+              ) : null}
+            </div>
+            <PaginationControls />
+          </div>
+        </div>
+
+        <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
+          <SheetContent side="left" className="w-80">
+            <DialogTitle className="hidden">
+              Filter Options
+            </DialogTitle>
+            {FilterComponent}
+          </SheetContent>
+        </Sheet>
       </div>
     </main>
   )

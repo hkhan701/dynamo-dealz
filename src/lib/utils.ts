@@ -82,3 +82,21 @@ export function useClickOutside(
     }
   }, [ref, onClickOutside])
 }
+
+export function getPageNumbers(currentPage: number, totalPages: number): (number | string)[] {
+  const pageNumbers: (number | string)[] = [];
+  pageNumbers.push(1);
+
+  let rangeStart = Math.max(2, currentPage - 1);
+  let rangeEnd = Math.min(totalPages - 1, currentPage + 1);
+
+  if (currentPage <= 2) rangeEnd = Math.min(4, totalPages - 1);
+  else if (currentPage >= totalPages - 1) rangeStart = Math.max(2, totalPages - 3);
+
+  if (rangeStart > 2) pageNumbers.push("ellipsis-start");
+  for (let i = rangeStart; i <= rangeEnd; i++) pageNumbers.push(i);
+  if (rangeEnd < totalPages - 1) pageNumbers.push("ellipsis-end");
+  if (totalPages > 1) pageNumbers.push(totalPages);
+
+  return pageNumbers;
+}
