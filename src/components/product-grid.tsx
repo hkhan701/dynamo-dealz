@@ -5,6 +5,7 @@ import Fuse from "fuse.js"
 import ProductCard from "@/components/product-card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
 import {
   Select,
   SelectContent,
@@ -16,7 +17,7 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
-import { Loader2, PackageSearch, Search, Filter } from "lucide-react"
+import { Loader2, PackageSearch, Search, Filter, Gift, Ticket } from "lucide-react"
 import { UI_MESSAGES } from "@/lib/strings"
 import { Product } from "@/types/product"
 import { getPageNumbers } from "@/lib/utils"
@@ -30,7 +31,12 @@ interface FilterState {
   priceRange: [number, number];
   minDiscount: number;
   sortBy?: string;
+  specialOffers: {
+    coupon: boolean;
+    promoCode: boolean;
+  };
 }
+
 
 export default function ProductGrid({ products }: Props) {
   const [query, setQuery] = useState("")
@@ -46,6 +52,10 @@ export default function ProductGrid({ products }: Props) {
     priceRange: [0, 9999],
     minDiscount: 0,
     sortBy: 'newest',
+    specialOffers: {
+      coupon: true,
+      promoCode: true,
+    },
   })
 
   const fuse = useMemo(() => {
@@ -88,6 +98,14 @@ export default function ProductGrid({ products }: Props) {
       result = result.filter((product) => product.final_savings_percent >= filters.minDiscount)
     }
 
+    // Filter by special offers
+    if (filters.specialOffers.coupon) {
+      result = result.filter((product) => product.clip_coupon_savings && product.clip_coupon_savings !== "")
+    }
+    if (filters.specialOffers.promoCode) {
+      result = result.filter((product) => product.promo_code && product.promo_code !== "")
+    }
+
     // Sort based on selected criteria
     switch (filters.sortBy) {
       case "newest":
@@ -126,7 +144,12 @@ export default function ProductGrid({ products }: Props) {
   const clearFilters = useCallback(() => {
     setFilters({
       priceRange: [0, 9999],
-      minDiscount: 0
+      minDiscount: 0,
+      sortBy: 'newest',
+      specialOffers: {
+        coupon: true,
+        promoCode: true,
+      },
     })
     setCurrentPage(1)
     setIsFilterSheetOpen(false)
@@ -268,6 +291,54 @@ export default function ProductGrid({ products }: Props) {
         </Select>
       </div>
 
+      {/* Special Offers */}
+      <div className="space-y-3 pt-2 border-t border-slate-100">
+        <h5 className="font-medium text-sm text-slate-600">Special Offers</h5>
+        <div className="flex flex-col gap-4">
+
+          {/* Clip Coupon Switch */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-slate-700">
+              <Gift className="h-4 w-4 text-muted-foreground" />
+              <span>Clip Coupon</span>
+            </div>
+            <Switch
+              checked={filters.specialOffers.coupon}
+              onCheckedChange={(value) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  specialOffers: {
+                    ...prev.specialOffers,
+                    coupon: value,
+                  },
+                }))
+              }
+            />
+          </div>
+
+          {/* Promo Code Switch */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-slate-700">
+              <Ticket className="h-4 w-4 text-muted-foreground" />
+              <span>Promo Code</span>
+            </div>
+            <Switch
+              checked={filters.specialOffers.promoCode}
+              onCheckedChange={(value) =>
+                setFilters((prev) => ({
+                  ...prev,
+                  specialOffers: {
+                    ...prev.specialOffers,
+                    promoCode: value,
+                  },
+                }))
+              }
+            />
+          </div>
+
+        </div>
+      </div>
+
       <div className="flex gap-2 mt-2">
         <Button className="flex-1 bg-leaf-background text-white" onClick={clearFilters}>
           Reset Filters
@@ -312,7 +383,7 @@ export default function ProductGrid({ products }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-[275px_1fr] gap-6 mb-6">
 
           {/* Filter Sidebar */}
-          <div className="hidden md:flex flex-col h-[500px] bg-white p-4 border border-slate-200 rounded-lg shadow-sm">
+          <div className="hidden md:flex flex-col h-[700px] bg-white p-4 border border-slate-200 rounded-lg shadow-sm">
             {FilterComponent}
           </div>
 
