@@ -29,6 +29,7 @@ interface Props {
 interface FilterState {
   priceRange: [number, number];
   minDiscount: number;
+  sortBy?: string;
 }
 
 export default function ProductGrid({ products }: Props) {
@@ -44,6 +45,7 @@ export default function ProductGrid({ products }: Props) {
   const [filters, setFilters] = useState<FilterState>({
     priceRange: [0, 9999],
     minDiscount: 0,
+    sortBy: 'newest',
   })
 
   const fuse = useMemo(() => {
@@ -84,6 +86,28 @@ export default function ProductGrid({ products }: Props) {
     // Filter by minimum discount
     if (filters.minDiscount > 0) {
       result = result.filter((product) => product.final_savings_percent >= filters.minDiscount)
+    }
+
+    // Sort based on selected criteria
+    switch (filters.sortBy) {
+      case "newest":
+        result.sort((a, b) => new Date(b.last_updated_time).getTime() - new Date(a.last_updated_time).getTime())
+        break
+      case "rating":
+        result.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+        break
+      case "reviews":
+        result.sort((a, b) => (b.rating_count || 0) - (a.rating_count || 0))
+        break
+      case "price-asc":
+        result.sort((a, b) => a.final_price - b.final_price)
+        break
+      case "price-desc":
+        result.sort((a, b) => b.final_price - a.final_price)
+        break
+      case "discount":
+        result.sort((a, b) => b.final_savings_percent - a.final_savings_percent)
+        break
     }
 
 
@@ -196,23 +220,52 @@ export default function ProductGrid({ products }: Props) {
         </div>
 
         {/* Custom discount input */}
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            placeholder="Custom %"
-            value={[0, 10, 25, 50, 70].includes(filters.minDiscount) ? "" : filters.minDiscount}
-            onChange={(e) => {
-              const value = Number(e.target.value)
-              if (!isNaN(value) && value >= 0 && value <= 100) {
-                setFilters((prev) => ({
-                  ...prev,
-                  minDiscount: value,
-                }))
-              }
-            }}
-            className="h-9"
-          />
+        <div className="space-y-2">
+          <label className="text-sm text-muted-foreground">Custom Discount</label>
+          <div className="relative">
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              className="w-full py-2 pl-4 pr-7 border rounded-md"
+              value={[0, 10, 25, 50, 70].includes(filters.minDiscount) ? "" : filters.minDiscount}
+              onChange={(e) => {
+                const cleaned = e.target.value.replace(/^0+(?!$)/, "")
+                const value = Number(cleaned)
+                if (!isNaN(value) && value >= 0 && value <= 100) {
+                  setFilters((prev) => ({
+                    ...prev,
+                    minDiscount: value,
+                  }))
+                }
+              }}
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">%</span>
+          </div>
         </div>
+      </div>
+
+      {/* Sorting Section */}
+      <div className="space-y-3 pt-2 border-t border-slate-100">
+        <h5 className="font-medium text-sm text-slate-600">Sort By</h5>
+        <Select
+          value={filters.sortBy}
+          onValueChange={(value) =>
+            setFilters((prev) => ({ ...prev, sortBy: value }))
+          }
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="newest">Newest</SelectItem>
+            <SelectItem value="rating">Review Rating</SelectItem>
+            <SelectItem value="reviews">Number of Reviews</SelectItem>
+            <SelectItem value="price-asc">Price: Low to High</SelectItem>
+            <SelectItem value="price-desc">Price: High to Low</SelectItem>
+            <SelectItem value="discount">Discount Amount</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex gap-2 mt-2">
