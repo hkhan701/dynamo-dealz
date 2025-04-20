@@ -120,41 +120,53 @@ export default function ProductGrid({ products }: Props) {
       {/* Price Range */}
       <div className="space-y-2">
         <h5 className="font-medium text-sm text-slate-600">Price Range</h5>
-        <div className="flex items-center gap-2 mb-2">
-          <Input
-            placeholder="Min"
-            type="number"
-            inputMode="numeric"
-            value={filters.priceRange[0].toString()}
-            onChange={(e) => {
-              const raw = e.target.value
-              const cleaned = raw.replace(/^0+(?!$)/, "") // removes leading zeros
-              const num = cleaned === "" ? 0 : Number(cleaned)
-              setFilters((prev) => ({
-                ...prev,
-                priceRange: [num, prev.priceRange[1]],
-              }))
-            }}
-            className="w-24"
-          />
-          <span>-</span>
-          <Input
-            placeholder="Max"
-            type="number"
-            inputMode="numeric"
-            value={filters.priceRange[1].toString()}
-            onChange={(e) => {
-              const raw = e.target.value
-              const cleaned = raw.replace(/^0+(?!$)/, "") // removes leading zeros
-              const num = cleaned === "" ? 0 : Number(cleaned)
-              setFilters((prev) => ({
-                ...prev,
-                priceRange: [prev.priceRange[0], num],
-              }))
-            }}
-            className="w-24"
-          />
 
+        <div className="flex flex-row items-center gap-4 md:flex-col lg:flex-row">
+          {/* Min Field */}
+          <div className="flex-1">
+            <label className="text-sm text-muted-foreground">Min</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              <Input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                value={filters.priceRange[0].toString()}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/^0+(?!$)/, "")
+                  const num = cleaned === "" ? 0 : Number(cleaned)
+                  setFilters((prev) => ({
+                    ...prev,
+                    priceRange: [num, prev.priceRange[1]],
+                  }))
+                }}
+                className="w-full py-2 px-7 border rounded-md"
+              />
+            </div>
+          </div>
+
+          {/* Max Field */}
+          <div className="flex-1">
+            <label className="text-sm text-muted-foreground">Max</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              <Input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                value={filters.priceRange[1].toString()}
+                onChange={(e) => {
+                  const cleaned = e.target.value.replace(/^0+(?!$)/, "")
+                  const num = cleaned === "" ? 0 : Number(cleaned)
+                  setFilters((prev) => ({
+                    ...prev,
+                    priceRange: [prev.priceRange[0], num],
+                  }))
+                }}
+                className="w-full py-2 px-7 border rounded-md"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
