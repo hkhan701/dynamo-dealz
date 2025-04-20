@@ -320,22 +320,16 @@ export default function ProductGrid({ products }: Props) {
                   <Loader2 className="animate-spin h-10 w-10" />
                   <span>{UI_MESSAGES.loadingDeals}</span>
                 </div>
-              ) : searchResults.length === 0 ? (
+              ) : filteredResults.length === 0 ? (
                 <div className="col-span-full flex flex-col justify-center items-center mt-8 text-muted-foreground gap-2 text-sm sm:text-base min-h-[200px]">
                   <PackageSearch className="h-10 w-10" />
-                  <p>{UI_MESSAGES.noDealsFound}</p>
+                  <p>None of the available deals match your filters and search query</p>
+                  <p className="text-sm text-slate-500">Try adjusting your filters or search terms</p>
+                  <Button variant="outline" onClick={clearFilters} className="mt-2">Reset Filters</Button>
                 </div>
               ) : (currentItems.map((product, index) => (
                 <ProductCard key={`${product.asin}-${index}`} product={product} lastUpdated={new Date(product.last_updated_time)} />
               )))}
-
-              {filteredResults.length === 0 ? (
-                <div className="col-span-full flex flex-col justify-center items-center mt-8 text-muted-foreground gap-2 text-sm sm:text-base min-h-[200px]">
-                  <PackageSearch className="h-10 w-10" />
-                  <p>None of the available deals match your filters, try resetting your filters.</p>
-                  <Button variant="outline" onClick={clearFilters} className="mt-2">Reset Filters</Button>
-                </div>
-              ) : null}
             </div>
             <PaginationControls />
           </div>
