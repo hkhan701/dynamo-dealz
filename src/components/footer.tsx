@@ -3,13 +3,12 @@
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
 
 export default function Footer() {
   return (
     <footer className="bg-slate-800 text-slate-300 py-8 mt-12">
       <div className="container px-4 mx-auto md:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h3 className="etna-text text-white font-semibold mb-4 flex items-center gap-2">
               <Image src="/ohcanadadealslogo.png" alt="OhCanadaDeals Logo" width={30} height={20} className="rounded-xl" />
@@ -18,15 +17,6 @@ export default function Footer() {
             <p className="text-sm">
               Your source for the best deals across Canada. We find the best discounts so you don&apos;t have to.
             </p>
-          </div>
-
-          <div>
-            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/" className="hover:text-white transition-colors">Home</Link></li>
-              <li><Link href="/about-us" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="/contact-us" className="hover:text-white transition-colors">Contact</Link></li>
-            </ul>
           </div>
 
           <div>
