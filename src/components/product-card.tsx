@@ -9,8 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { formatDistanceToNow, getAffiliateLink } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
-import CopyAlert from "@/components/copy-alert"
-import { useState } from "react"
+import { toast } from "sonner"
 
 interface ProductCardProps {
   product: {
@@ -35,7 +34,6 @@ interface ProductCardProps {
 export default function ProductCard({ product, lastUpdated }: ProductCardProps) {
   const truncatedName = product.name.length > 80 ? `${product.name.substring(0, 80)}...` : product.name
   const lastUpdatedRelative = formatDistanceToNow(lastUpdated)
-  const [showCopiedAlert, setShowCopiedAlert] = useState(false)
 
   return (
     <Card className="overflow-hidden transition-all hover:shadow-lg">
@@ -91,17 +89,46 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
 
         {/* Additional savings info */}
         {(Number(product.clip_coupon_savings) > 0 || product.promo_code) && (
-          <div className="space-y-1 rounded-md bg-muted p-2 text-xs">
+          <div className="rounded-md bg-muted/50 p-2 text-xs space-y-2 border border-muted shadow-sm">
+
+            {/* Clip Coupon */}
             {Number(product.clip_coupon_savings) > 0 && (
-              <div className="flex justify-between">
-                <span>Coupon:</span>
-                <span className="font-medium text-green-600">-${product.clip_coupon_savings}</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  {/* <Gift className="w-3 h-3" /> */}
+                  <span>Coupon</span>
+                </div>
+                <span className="font-semibold text-green-600">
+                  -${product.clip_coupon_savings}
+                </span>
               </div>
             )}
+
+            {/* Promo Code with Copy */}
             {product.promo_code && (
-              <div className="flex justify-between">
-                <span>Promo Code:</span>
-                <span className="font-medium">{product.promo_code}</span>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  {/* <Ticket className="w-3 h-3" /> */}
+                  <span>Promo</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="font-mono font-medium">{product.promo_code}</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(product.promo_code || "")
+                      toast.success(`Promo code copied: ${product.promo_code}`, {
+                        style: {
+                          backgroundColor: '#dcfce7', // Tailwind green-100
+                          color: '#166534'            // Tailwind green-700
+                        }
+                      })
+                    }}
+                    className="p-1 rounded hover:bg-muted transition"
+                    aria-label="Copy promo code"
+                  >
+                    <Copy className="w-3 h-3 text-muted-foreground" />
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -132,7 +159,12 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             size="icon"
             onClick={() => {
               navigator.clipboard.writeText(getAffiliateLink(product.hyperlink))
-              setShowCopiedAlert(true)
+              toast.success(UI_MESSAGES.linkCopied, {
+                style: {
+                  backgroundColor: '#dcfce7', // Tailwind green-100
+                  color: '#166534'            // Tailwind green-700
+                }
+              })
             }}
             className="h-10 w-full sm:w-10 flex items-center justify-center gap-2 text-sm"
           >
@@ -147,12 +179,6 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
           <span>Updated {lastUpdatedRelative} ago</span>
         </div>
       </CardFooter>
-
-      <CopyAlert
-        show={showCopiedAlert}
-        onDismiss={() => setShowCopiedAlert(false)}
-        message={UI_MESSAGES.linkCopied}
-      />
     </Card>
   )
 }

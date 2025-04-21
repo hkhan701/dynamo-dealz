@@ -5,11 +5,10 @@ import Image from "next/image"
 import { Share2, Facebook, Link as LinkIcon } from "lucide-react"
 import { buildShareUrl, WEBSITE_URL, SHARE_TEXT, useClickOutside } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
-import CopyAlert from "@/components/copy-alert"
+import { toast } from "sonner"
 
 export default function Header() {
   const [showShareOptions, setShowShareOptions] = useState(false)
-  const [showCopiedAlert, setShowCopiedAlert] = useState(false)
   const shareOptionsRef = useRef<HTMLDivElement>(null)
 
   // Detect click outside share dock
@@ -18,8 +17,13 @@ export default function Header() {
   const handleShare = (platform: string) => {
     if (platform === "copy") {
       navigator.clipboard.writeText(WEBSITE_URL)
-      setShowCopiedAlert(true)
       setShowShareOptions(false)
+      toast.success(UI_MESSAGES.linkCopied, {
+        style: {
+          backgroundColor: '#dcfce7', // Tailwind green-100
+          color: '#166534'            // Tailwind green-700
+        }
+      })
       return
     }
 
@@ -87,12 +91,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Copy Alert */}
-      <CopyAlert
-        show={showCopiedAlert}
-        onDismiss={() => setShowCopiedAlert(false)}
-        message={UI_MESSAGES.linkCopied}
-      />
     </header>
   )
 }

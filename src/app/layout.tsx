@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react"
+import { Toaster } from "@/components/ui/sonner"
 
 const Etna = localFont({
   src: './etna.otf',
@@ -38,6 +39,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <Analytics />
+        <Toaster />
       </body>
     </html>
   );
