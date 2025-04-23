@@ -22,6 +22,7 @@ import { UI_MESSAGES } from "@/lib/strings"
 import { Product } from "@/types/product"
 import { getPageNumbers } from "@/lib/utils"
 import { DialogTitle } from "@radix-ui/react-dialog"
+import { TabsList, Tabs, TabsTrigger } from "./ui/tabs"
 
 interface Props {
   products: Product[]
@@ -228,19 +229,24 @@ export default function ProductGrid({ products }: Props) {
           )}
         </div>
 
-        <div className="grid grid-cols-5 gap-2">
-          {[0, 10, 25, 50, 70].map((discount) => (
-            <Button
-              key={discount}
-              variant={filters.minDiscount === discount ? "default" : "outline"}
-              className={`h-9 px-2 text-xs ${filters.minDiscount === discount ? "bg-leaf-background text-white" : "text-slate-600"
-                }`}
-              onClick={() => setFilters((prev) => ({ ...prev, minDiscount: discount }))}
-            >
-              {discount === 0 ? "Any" : `${discount}%+`}
-            </Button>
-          ))}
-        </div>
+        <Tabs
+          value={filters.minDiscount.toString()}
+          onValueChange={(value) =>
+            setFilters((prev) => ({ ...prev, minDiscount: parseInt(value) }))
+          }
+        >
+          <TabsList className="grid grid-cols-5 gap-2 w-full">
+            {[0, 10, 25, 50, 70].map((discount) => (
+              <TabsTrigger
+                key={discount}
+                value={discount.toString()}
+                className=" text-xs data-[state=active]:bg-leaf-background data-[state=active]:text-white text-slate-600"
+              >
+                {discount === 0 ? "Any" : `${discount}%+`}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
 
         {/* Custom discount input */}
         <div className="space-y-2">
