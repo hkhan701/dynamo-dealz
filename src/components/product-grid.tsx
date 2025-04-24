@@ -17,7 +17,7 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
-import { Loader2, PackageSearch, Search, Filter, Gift, Ticket, Clock, ArrowDown, ArrowUp, MessageSquare, Percent, Star, Check } from "lucide-react"
+import { Loader2, PackageSearch, Search, Filter, Gift, Ticket, Clock, ArrowDown, ArrowUp, MessageSquare, Percent, Star, Check, ChevronDown } from "lucide-react"
 import { UI_MESSAGES } from "@/lib/strings"
 import { Product } from "@/types/product"
 import { getPageNumbers, cn } from "@/lib/utils"
@@ -264,27 +264,36 @@ export default function ProductGrid({ products }: Props) {
 
         <div className="space-y-2">
           <label className="text-xs text-muted-foreground">Custom Discount</label>
-          <div className="relative">
+
+          <div
+            className={cn(
+              "relative rounded-md border transition-all duration-300 ease-in-out",
+              ![0, 10, 25, 50, 70].includes(filters.minDiscount)
+                ? "ring-2 ring-leaf-background border-transparent scale-[1.02]"
+                : "border-slate-200"
+            )}
+          >
             <input
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
-              className="w-full py-2 pl-4 pr-7 border rounded-md"
+              className="w-full py-2 pl-4 pr-7 rounded-md bg-white focus:outline-none"
               value={[0, 10, 25, 50, 70].includes(filters.minDiscount) ? "" : filters.minDiscount}
               onChange={(e) => {
-                const cleaned = e.target.value.replace(/^0+(?!$)/, "")
-                const value = Number(cleaned)
+                const cleaned = e.target.value.replace(/^0+(?!$)/, "");
+                const value = Number(cleaned);
                 if (!isNaN(value) && value >= 0 && value <= 100) {
                   setFilters((prev) => ({
                     ...prev,
                     minDiscount: value,
-                  }))
+                  }));
                 }
               }}
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">%</span>
           </div>
         </div>
+
       </section>
 
       {/* Sort By */}
@@ -342,17 +351,17 @@ export default function ProductGrid({ products }: Props) {
 
       {/* Categories */}
       <section className="space-y-3 border-t pt-4">
-        <h5 className="text-sm font-medium text-slate-600">Categories</h5>
+        <h5 className="text-sm font-medium text-slate-600 transition-opacity duration-300 hover:opacity-80">Categories</h5>
 
         <div
           className={cn(
-            "space-y-1 overflow-hidden transition-[max-height] duration-500 ease-in-out",
-            showAllCategories ? "max-h-[1000px]" : "max-h-[260px]"
+            "space-y-1 overflow-hidden transition-all duration-500 ease-in-out",
+            showAllCategories ? "max-h-[1000px] opacity-100" : "max-h-[260px] opacity-100"
           )}
         >
           {Object.entries(GENERAL_CATEGORIES)
             .slice(0, showAllCategories ? undefined : 6)
-            .map(([key, { icon: Icon, label }]) => {
+            .map(([key, { icon: Icon, label }], index) => {
               const isSelected = filters.categories.includes(key);
 
               return (
@@ -367,28 +376,36 @@ export default function ProductGrid({ products }: Props) {
                     })
                   }
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-md p-2 text-sm capitalize transition-colors",
-                    isSelected ? "bg-zinc-50 text-black" : "hover:bg-slate-50 text-muted-foreground"
+                    "flex w-full items-center gap-2 rounded-md p-2 text-sm capitalize transition-all duration-300",
+                    "transform hover:translate-x-1 hover:shadow-sm",
+                    isSelected
+                      ? "bg-zinc-50 text-black"
+                      : "hover:bg-slate-50 text-muted-foreground"
                   )}
+                  style={{
+                    animationDelay: `${index * 50}ms`,
+                    animationFillMode: "both"
+                  }}
                 >
-                  <Icon className="size-4 shrink-0" />
+                  <Icon className="size-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
                   <span className="truncate">{label}</span>
                   {isSelected && (
-                    <Check className="ml-auto size-4 shrink-0 stroke-[3]" />
+                    <Check className="ml-auto size-4 shrink-0 stroke-[3] animate-appear" />
                   )}
                 </button>
               );
             })}
         </div>
 
-
         <button
           onClick={() => setShowAllCategories((prev) => !prev)}
-          className="w-full text-xs text-muted-foreground hover:underline pt-1"
+          className="w-full text-xs text-muted-foreground transition-all duration-300 hover:underline hover:text-slate-700 pt-1 flex items-center justify-center gap-1"
         >
-          {showAllCategories ? "Show less" : "Show more"}
+          <span>{showAllCategories ? "Show less" : "Show more"}</span>
+          <span className={`transition-transform duration-300 ${showAllCategories ? "rotate-180" : "rotate-0"}`}>
+            <ChevronDown className="h-4 w-4" />
+          </span>
         </button>
-
       </section>
 
       {/* Special Offers */}

@@ -11,7 +11,6 @@ import {
   Briefcase,
   PawPrint,
   Gift,
-  ShoppingBag,
   Activity,
   ClipboardList,
   Package,
@@ -25,10 +24,6 @@ export const GENERAL_CATEGORIES = {
   "Home & Kitchen": {
     icon: Utensils,
     label: "Home & Kitchen",
-  },
-  "Kitchen & Dining": {
-    icon: Utensils,
-    label: "Kitchen & Dining",
   },
   "Toys & Games": {
     icon: Gift,
@@ -53,10 +48,6 @@ export const GENERAL_CATEGORIES = {
   "Clothing, Shoes & Jewelry": {
     icon: Shirt,
     label: "Clothing, Shoes & Jewelry",
-  },
-  "Jewelry": {
-    icon: ShoppingBag,
-    label: "Jewelry",
   },
   "Automotive": {
     icon: Car,
@@ -124,6 +115,8 @@ export const CATEGORY_MAP: Record<string, string> = {
   tripods: "Electronics",
   video_light: "Electronics",
   photography_accessories: "Electronics",
+  fpv_drone: "Electronics",
+  action_camera: "Electronics",
 
   // ✅ Home & Kitchen
   home_organization: "Home & Kitchen",
@@ -133,10 +126,10 @@ export const CATEGORY_MAP: Record<string, string> = {
   led_lights: "Home & Kitchen",
   indoor_lighting: "Home & Kitchen",
   outdoor_lighting: "Home & Kitchen",
-  kitchen_appliances: "Kitchen & Dining",
-  cookware: "Kitchen & Dining",
-  cutlery: "Kitchen & Dining",
-  kitchen_accessories: "Kitchen & Dining",
+  kitchen_appliances: "Home & Kitchen",
+  cookware: "Home & Kitchen",
+  cutlery: "Home & Kitchen",
+  kitchen_accessories: "Home & Kitchen",
   bedding: "Home & Kitchen",
   bedroom_accessories: "Home & Kitchen",
   pillows: "Home & Kitchen",
@@ -150,20 +143,18 @@ export const CATEGORY_MAP: Record<string, string> = {
   shower_curtains: "Home & Kitchen",
   bathroom_accessories: "Home & Kitchen",
   storage_solutions: "Home & Kitchen",
-  garage_tools: "Tools & Home Improvement",
   solar_light: "Home & Kitchen",
   floor_lamps: "Home & Kitchen",
   ceiling_lights: "Home & Kitchen",
   desk_lamps: "Home & Kitchen",
-  cleaning_supplies: "Health & Household",
   blankets: "Home & Kitchen",
   mirrors: "Home & Kitchen",
-  knife_sets: "Kitchen & Dining",
+  knife_sets: "Home & Kitchen",
   shelving_racks: "Home & Kitchen",
   room_decor: "Home & Kitchen",
-  door_locks: "Tools & Home Improvement",
-  locks: "Tools & Home Improvement",
   space_heaters: "Home & Kitchen",
+  vacuums: "Home & Kitchen",
+  robot_vacuums: "Home & Kitchen",
 
   // ✅ Toys & Games
   action_figures: "Toys & Games",
@@ -182,6 +173,7 @@ export const CATEGORY_MAP: Record<string, string> = {
   health_supplements: "Health & Household",
   electric_toothbrush: "Health & Household",
   smart_scales: "Health & Household",
+  cleaning_supplies: "Health & Household",
 
   // ✅ Sports & Outdoors
   fitness_equipment: "Sports & Outdoors",
@@ -196,33 +188,17 @@ export const CATEGORY_MAP: Record<string, string> = {
   hand_tools: "Tools & Home Improvement",
   power_tools: "Tools & Home Improvement",
   garden_tools: "Tools & Home Improvement",
+  garage_tools: "Tools & Home Improvement",
+  door_locks: "Tools & Home Improvement",
+  locks: "Tools & Home Improvement",
+  solar_panel: "Tools & Home Improvement",
 
-  // ✅ Jewelry
+  // ✅ Clothing, Shoes & Jewelry
   necklaces: "Clothing, Shoes & Jewelry",
   bracelets: "Clothing, Shoes & Jewelry",
   earrings: "Clothing, Shoes & Jewelry",
   rings: "Clothing, Shoes & Jewelry",
   watches_for_men: "Clothing, Shoes & Jewelry",
-
-  // ✅ Automotive
-  car_accessories: "Automotive",
-  car_chargers: "Automotive",
-  car_tools: "Automotive",
-  dashcams: "Automotive",
-
-  // ✅ Pet Supplies
-  pet_food: "Pet Supplies",
-  dog_accessories: "Pet Supplies",
-  cat_accessories: "Pet Supplies",
-
-  // ✅ Baby Products
-  baby_care_products: "Baby Products",
-
-  // ✅ Office Products
-  office_accessories: "Office Products",
-  stationery: "Office Products",
-
-  // ✅ Clothing, Shoes & Jewelry
   womens_clothing: "Clothing, Shoes & Jewelry",
   mens_clothing: "Clothing, Shoes & Jewelry",
   women_shoes: "Clothing, Shoes & Jewelry",
@@ -242,6 +218,24 @@ export const CATEGORY_MAP: Record<string, string> = {
   handbags: "Clothing, Shoes & Jewelry",
   jackets: "Clothing, Shoes & Jewelry",
 
+  // ✅ Automotive
+  car_accessories: "Automotive",
+  car_chargers: "Automotive",
+  car_tools: "Automotive",
+  dashcams: "Automotive",
+
+  // ✅ Pet Supplies
+  pet_food: "Pet Supplies",
+  dog_accessories: "Pet Supplies",
+  cat_accessories: "Pet Supplies",
+
+  // ✅ Baby Products
+  baby_care_products: "Baby Products",
+
+  // ✅ Office Products
+  office_accessories: "Office Products",
+  stationery: "Office Products",
+
   // ✅ Arts, Crafts & Sewing
   art_supplies: "Arts, Crafts & Sewing",
   handcrafted_items: "Arts, Crafts & Sewing",
@@ -253,18 +247,7 @@ export const CATEGORY_MAP: Record<string, string> = {
   // ✅ Patio, Lawn & Garden
   garden_decor: "Patio, Lawn & Garden",
 
-  // ✅ Travel
+  // ✅ Travel Essentials
   luggage: "Travel Essentials",
   travel_essentials: "Travel Essentials",
-
-  // ✅ Vacuums
-  vacuums: "Home & Kitchen",
-  robot_vacuums: "Home & Kitchen",
-
-  // ✅ Solar & Renewable
-  solar_panel: "Tools & Home Improvement",
-
-  // ✅ Cameras
-  fpv_drone: "Electronics",
-  action_camera: "Electronics",
 };
