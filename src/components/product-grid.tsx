@@ -17,12 +17,13 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
-import { Loader2, PackageSearch, Search, Filter, Gift, Ticket, Clock, ArrowDown, ArrowUp, MessageSquare, Percent, Star } from "lucide-react"
+import { Loader2, PackageSearch, Search, Filter, Gift, Ticket, Clock, ArrowDown, ArrowUp, MessageSquare, Percent, Star, Check } from "lucide-react"
 import { UI_MESSAGES } from "@/lib/strings"
 import { Product } from "@/types/product"
 import { getPageNumbers, cn } from "@/lib/utils"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { TabsList, Tabs, TabsTrigger } from "@/components/ui/tabs"
+import { GENERAL_CATEGORIES } from "@/lib/category"
 
 interface Props {
   products: Product[]
@@ -32,6 +33,7 @@ interface FilterState {
   priceRange: [number, number];
   minDiscount: number;
   sortBy?: string;
+  categories: string[];
   specialOffers: {
     coupon: boolean;
     promoCode: boolean;
@@ -48,12 +50,15 @@ export default function ProductGrid({ products }: Props) {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(12)
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
+  const [showAllCategories, setShowAllCategories] = useState(false);
+
 
   // Enhanced filter state
   const [filters, setFilters] = useState<FilterState>({
     priceRange: [0, 9999],
     minDiscount: 0,
     sortBy: 'newest',
+    categories: [],
     specialOffers: {
       coupon: false,
       promoCode: false,
@@ -99,6 +104,13 @@ export default function ProductGrid({ products }: Props) {
     // Filter by minimum discount
     if (filters.minDiscount > 0) {
       result = result.filter((product) => product.final_savings_percent >= filters.minDiscount)
+    }
+
+    // Filter by categories
+    if (filters.categories.length > 0) {
+      result = result.filter((product) =>
+        filters.categories.includes(product.category)
+      )
     }
 
     // Filter by special offers
@@ -149,6 +161,7 @@ export default function ProductGrid({ products }: Props) {
       priceRange: [0, 9999],
       minDiscount: 0,
       sortBy: 'newest',
+      categories: [],
       specialOffers: {
         coupon: false,
         promoCode: false,
@@ -327,6 +340,57 @@ export default function ProductGrid({ products }: Props) {
         </Select>
       </section>
 
+      {/* Categories */}
+      <section className="space-y-3 border-t pt-4">
+        <h5 className="text-sm font-medium text-slate-600">Categories</h5>
+
+        <div
+          className={cn(
+            "space-y-1 overflow-hidden transition-[max-height] duration-500 ease-in-out",
+            showAllCategories ? "max-h-[1000px]" : "max-h-[260px]"
+          )}
+        >
+          {Object.entries(GENERAL_CATEGORIES)
+            .slice(0, showAllCategories ? undefined : 6)
+            .map(([key, { icon: Icon, label }]) => {
+              const isSelected = filters.categories.includes(key);
+
+              return (
+                <button
+                  key={key}
+                  onClick={() =>
+                    setFilters((prev) => {
+                      const newCategories = isSelected
+                        ? prev.categories.filter((c) => c !== key)
+                        : [...prev.categories, key];
+                      return { ...prev, categories: newCategories };
+                    })
+                  }
+                  className={cn(
+                    "flex w-full items-center gap-2 rounded-md p-2 text-sm capitalize transition-colors",
+                    isSelected ? "bg-zinc-50 text-black" : "hover:bg-slate-50 text-muted-foreground"
+                  )}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  <span className="truncate">{label}</span>
+                  {isSelected && (
+                    <Check className="ml-auto size-4 shrink-0 stroke-[3]" />
+                  )}
+                </button>
+              );
+            })}
+        </div>
+
+
+        <button
+          onClick={() => setShowAllCategories((prev) => !prev)}
+          className="w-full text-xs text-muted-foreground hover:underline pt-1"
+        >
+          {showAllCategories ? "Show less" : "Show more"}
+        </button>
+
+      </section>
+
       {/* Special Offers */}
       <section className="space-y-3 border-t pt-4">
         <h5 className="text-sm font-medium text-slate-600">Special Offers</h5>
@@ -469,7 +533,7 @@ export default function ProductGrid({ products }: Props) {
         </Button>
       </div>
     </>
-  ), [filters, clearFilters])
+  ), [filters, clearFilters, showAllCategories])
 
   const PaginationControls = () => (
     totalPages > 1 && (
@@ -507,7 +571,7 @@ export default function ProductGrid({ products }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-[275px_1fr] gap-6 mb-6">
 
           {/* Filter Sidebar */}
-          <div className="hidden md:flex flex-col gap-6 p-4 bg-white rounded-xl shadow-sm border border-slate-200 h-[900px]">
+          <div className="hidden md:flex flex-col gap-6 p-4 bg-white rounded-xl shadow-sm border border-slate-200 h-fit">
             {FilterComponent}
           </div>
 

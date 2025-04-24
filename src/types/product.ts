@@ -14,6 +14,7 @@ export interface Product {
   last_updated_time: string
   rating: number
   rating_count: number
+  category: string
 }
 
 export interface ProductData {

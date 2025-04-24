@@ -10,24 +10,10 @@ import { Button } from "@/components/ui/button"
 import { formatDistanceToNow, getAffiliateLink } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
 import { toast } from "sonner"
+import { Product } from "@/types/product"
 
 interface ProductCardProps {
-  product: {
-    name: string
-    asin: string
-    list_price: number
-    current_price: number
-    percent_off_list_price: string
-    clip_coupon_savings: string
-    promo_code: string
-    promo_code_percent_off: string
-    final_savings_percent: number
-    final_price: number
-    hyperlink: string
-    image_link: string
-    rating: number
-    rating_count: number
-  }
+  product: Product,
   lastUpdated: Date
 }
 
@@ -95,7 +81,6 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             {Number(product.clip_coupon_savings) > 0 && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1 text-muted-foreground">
-                  {/* <Gift className="w-3 h-3" /> */}
                   <span>Coupon</span>
                 </div>
                 <span className="font-semibold text-green-600">
@@ -108,7 +93,6 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             {product.promo_code && (
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 text-muted-foreground">
-                  {/* <Ticket className="w-3 h-3" /> */}
                   <span>Promo</span>
                 </div>
                 <div className="flex items-center gap-1">
