@@ -596,13 +596,17 @@ export default function ProductGrid({ products }: Props) {
         </div>
 
         <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
-          <SheetContent side="left" className="w-80">
+          <SheetContent
+            side="left"
+            className="w-80 h-screen overflow-y-auto"
+          >
             <DialogTitle className="hidden">
               Filter Options
             </DialogTitle>
             {FilterComponent}
           </SheetContent>
         </Sheet>
+
       </div>
     </main>
   )
