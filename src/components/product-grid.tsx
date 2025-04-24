@@ -599,6 +599,7 @@ export default function ProductGrid({ products }: Props) {
           <SheetContent
             side="left"
             className="w-80 h-screen overflow-y-auto"
+            onOpenAutoFocus={(event) => event.preventDefault()}
           >
             <DialogTitle className="hidden">
               Filter Options
