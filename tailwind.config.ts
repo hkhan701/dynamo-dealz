@@ -13,6 +13,7 @@ export default {
 				// Custom colors
 				'leaf-red': '#e2103d',
 				'leaf-background': '#ff5757',
+				'blush': '#FBE4E3',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

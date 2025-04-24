@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${Etna.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-leaf-background/20`}
+        className={`${Etna.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-blush`}
       >
         {children}
         <Footer />

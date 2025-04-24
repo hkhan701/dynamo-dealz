@@ -17,12 +17,12 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
-import { Loader2, PackageSearch, Search, Filter, Gift, Ticket } from "lucide-react"
+import { Loader2, PackageSearch, Search, Filter, Gift, Ticket, Clock, ArrowDown, ArrowUp, MessageSquare, Percent, Star } from "lucide-react"
 import { UI_MESSAGES } from "@/lib/strings"
 import { Product } from "@/types/product"
-import { getPageNumbers } from "@/lib/utils"
+import { getPageNumbers, cn } from "@/lib/utils"
 import { DialogTitle } from "@radix-ui/react-dialog"
-import { TabsList, Tabs, TabsTrigger } from "./ui/tabs"
+import { TabsList, Tabs, TabsTrigger } from "@/components/ui/tabs"
 
 interface Props {
   products: Product[]
@@ -35,6 +35,7 @@ interface FilterState {
   specialOffers: {
     coupon: boolean;
     promoCode: boolean;
+    lightningDeals: boolean;
   };
 }
 
@@ -56,6 +57,7 @@ export default function ProductGrid({ products }: Props) {
     specialOffers: {
       coupon: false,
       promoCode: false,
+      lightningDeals: false
     },
   })
 
@@ -150,6 +152,7 @@ export default function ProductGrid({ products }: Props) {
       specialOffers: {
         coupon: false,
         promoCode: false,
+        lightningDeals: false
       },
     })
     setCurrentPage(1)
@@ -157,22 +160,21 @@ export default function ProductGrid({ products }: Props) {
   }, [])
 
   const FilterComponent = useMemo(() => (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between mb-4">
-        <h4 className="font-bold text-slate-700 flex items-center gap-2">
-          <Filter className="h-5 w-5" />
+    <>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h4 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+          <Filter className="h-5 w-5 text-primary" />
           Filters
         </h4>
       </div>
 
       {/* Price Range */}
-      <div className="space-y-2">
-        <h5 className="font-medium text-sm text-slate-600">Price Range</h5>
-
-        <div className="flex flex-row items-center gap-4 md:flex-col lg:flex-row">
-          {/* Min Field */}
+      <section className="space-y-3">
+        <h5 className="text-sm font-medium text-slate-600">Price Range</h5>
+        <div className="flex flex-col gap-3 sm:flex-row">
           <div className="flex-1">
-            <label className="text-sm text-muted-foreground">Min</label>
+            <label className="text-xs text-muted-foreground mb-1 block">Min</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
               <Input
@@ -188,14 +190,13 @@ export default function ProductGrid({ products }: Props) {
                     priceRange: [num, prev.priceRange[1]],
                   }))
                 }}
-                className="w-full py-2 px-7 border rounded-md"
+                className="pl-7"
               />
             </div>
           </div>
 
-          {/* Max Field */}
           <div className="flex-1">
-            <label className="text-sm text-muted-foreground">Max</label>
+            <label className="text-xs text-muted-foreground mb-1 block">Max</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
               <Input
@@ -211,20 +212,20 @@ export default function ProductGrid({ products }: Props) {
                     priceRange: [prev.priceRange[0], num],
                   }))
                 }}
-                className="w-full py-2 px-7 border rounded-md"
+                className="pl-7"
               />
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Minimum Discount */}
-      <div className="space-y-3 pt-2 border-t border-slate-100">
+      <section className="space-y-3 border-t pt-4">
         <div className="flex items-center justify-between">
-          <h5 className="font-medium text-sm text-slate-600">Minimum Discount</h5>
+          <h5 className="text-sm font-medium text-slate-600">Minimum Discount</h5>
           {filters.minDiscount > 0 && (
-            <span className="text-xs font-medium px-2 py-1 bg-green-50 text-green-600 rounded-full">
-              {filters.minDiscount}% or more
+            <span className="text-xs font-medium px-2 py-0.5 bg-green-100 text-green-700 rounded-full">
+              {filters.minDiscount}%+
             </span>
           )}
         </div>
@@ -240,7 +241,7 @@ export default function ProductGrid({ products }: Props) {
               <TabsTrigger
                 key={discount}
                 value={discount.toString()}
-                className=" text-xs data-[state=active]:bg-leaf-background data-[state=active]:text-white text-slate-600"
+                className="text-xs py-1 data-[state=active]:bg-leaf-background data-[state=active]:text-white text-slate-600"
               >
                 {discount === 0 ? "Any" : `${discount}%+`}
               </TabsTrigger>
@@ -248,9 +249,8 @@ export default function ProductGrid({ products }: Props) {
           </TabsList>
         </Tabs>
 
-        {/* Custom discount input */}
         <div className="space-y-2">
-          <label className="text-sm text-muted-foreground">Custom Discount</label>
+          <label className="text-xs text-muted-foreground">Custom Discount</label>
           <div className="relative">
             <input
               type="text"
@@ -272,11 +272,11 @@ export default function ProductGrid({ products }: Props) {
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">%</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Sorting Section */}
-      <div className="space-y-3 pt-2 border-t border-slate-100">
-        <h5 className="font-medium text-sm text-slate-600">Sort By</h5>
+      {/* Sort By */}
+      <section className="space-y-3 border-t pt-4">
+        <h5 className="text-sm font-medium text-slate-600">Sort By</h5>
         <Select
           value={filters.sortBy}
           onValueChange={(value) =>
@@ -287,70 +287,188 @@ export default function ProductGrid({ products }: Props) {
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="newest">Newest</SelectItem>
-            <SelectItem value="rating">Review Rating</SelectItem>
-            <SelectItem value="reviews">Number of Reviews</SelectItem>
-            <SelectItem value="price-asc">Price: Low to High</SelectItem>
-            <SelectItem value="price-desc">Price: High to Low</SelectItem>
-            <SelectItem value="discount">Discount Amount</SelectItem>
+            <SelectItem value="newest">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-muted-foreground" />
+                <span>Newest</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="rating">
+              <div className="flex items-center gap-2">
+                <Star className="h-4 w-4 text-yellow-400" />
+                <span>Review Rating</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="reviews">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                <span>Number of Reviews</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="price-asc">
+              <div className="flex items-center gap-2">
+                <ArrowDown className="h-4 w-4 text-green-500" />
+                <span>Price: Low to High</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="price-desc">
+              <div className="flex items-center gap-2">
+                <ArrowUp className="h-4 w-4 text-red-500" />
+                <span>Price: High to Low</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="discount">
+              <div className="flex items-center gap-2">
+                <Percent className="h-4 w-4 text-blue-500" />
+                <span>Discount Amount</span>
+              </div>
+            </SelectItem>
           </SelectContent>
         </Select>
-      </div>
+      </section>
 
       {/* Special Offers */}
-      <div className="space-y-3 pt-2 border-t border-slate-100">
-        <h5 className="font-medium text-sm text-slate-600">Special Offers</h5>
+      <section className="space-y-3 border-t pt-4">
+        <h5 className="text-sm font-medium text-slate-600">Special Offers</h5>
         <div className="flex flex-col gap-4">
-
-          {/* Clip Coupon Switch */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-slate-700">
-              <Gift className="h-4 w-4 text-muted-foreground" />
-              <span>Clip Coupon</span>
+          <div
+            className={cn(
+              "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
+              filters.specialOffers.coupon
+                ? "bg-emerald-50 border-emerald-200"
+                : "bg-white border-slate-200 hover:bg-slate-50",
+            )}
+          >
+            <div className="flex items-center gap-2 text-sm">
+              <div
+                className={cn(
+                  "flex items-center justify-center w-8 h-8 rounded-full",
+                  filters.specialOffers.coupon ? "bg-emerald-100" : "bg-slate-100",
+                )}
+              >
+                <Gift className={cn("h-4 w-4", filters.specialOffers.coupon ? "text-emerald-600" : "text-slate-500")} />
+              </div>
+              <div>
+                <span
+                  className={cn("font-medium", filters.specialOffers.coupon ? "text-emerald-800" : "text-slate-700")}
+                >
+                  Clip Coupon
+                </span>
+                <p className="text-xs text-slate-500">Products with additional coupons</p>
+              </div>
             </div>
             <Switch
               checked={filters.specialOffers.coupon}
-              onCheckedChange={(value) =>
+              className={filters.specialOffers.coupon ? "bg-emerald-500" : ""}
+              onClick={() =>
                 setFilters((prev) => ({
                   ...prev,
                   specialOffers: {
                     ...prev.specialOffers,
-                    coupon: value,
+                    coupon: !prev.specialOffers.coupon,
                   },
                 }))
               }
             />
           </div>
 
-          {/* Promo Code Switch */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm text-slate-700">
-              <Ticket className="h-4 w-4 text-muted-foreground" />
-              <span>Promo Code</span>
+          <div
+            className={cn(
+              "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
+              filters.specialOffers.promoCode
+                ? "bg-purple-50 border-purple-200"
+                : "bg-white border-slate-200 hover:bg-slate-50",
+            )}
+          >
+            <div className="flex items-center gap-2 text-sm">
+              <div
+                className={cn(
+                  "flex items-center justify-center w-8 h-8 rounded-full",
+                  filters.specialOffers.promoCode ? "bg-purple-100" : "bg-slate-100",
+                )}
+              >
+                <Ticket
+                  className={cn("h-4 w-4", filters.specialOffers.promoCode ? "text-purple-600" : "text-slate-500")}
+                />
+              </div>
+              <div>
+                <span
+                  className={cn(
+                    "font-medium",
+                    filters.specialOffers.promoCode ? "text-purple-800" : "text-slate-700",
+                  )}
+                >
+                  Promo Code
+                </span>
+                <p className="text-xs text-slate-500">Products with promo code discounts</p>
+              </div>
             </div>
             <Switch
               checked={filters.specialOffers.promoCode}
-              onCheckedChange={(value) =>
+              className={filters.specialOffers.promoCode ? "bg-purple-500" : ""}
+              onClick={() =>
                 setFilters((prev) => ({
                   ...prev,
                   specialOffers: {
                     ...prev.specialOffers,
-                    promoCode: value,
+                    promoCode: !prev.specialOffers.promoCode,
                   },
                 }))
               }
             />
           </div>
 
+          <div
+            className={cn(
+              "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
+              filters.specialOffers.lightningDeals
+                ? "bg-amber-50 border-amber-200"
+                : "bg-white border-slate-200 hover:bg-slate-50",
+            )}
+          >
+            <div className="flex items-center gap-2 text-sm">
+              <div
+                className={cn(
+                  "flex items-center justify-center w-8 h-8 rounded-full",
+                  filters.specialOffers.lightningDeals ? "bg-amber-100" : "bg-slate-100",
+                )}
+              >
+                <Gift className={cn("h-4 w-4", filters.specialOffers.lightningDeals ? "text-amber-600" : "text-slate-500")} />
+              </div>
+              <div>
+                <span
+                  className={cn("font-medium", filters.specialOffers.lightningDeals ? "text-amber-800" : "text-slate-700")}
+                >
+                  Lightning Deals
+                </span>
+                <p className="text-xs text-slate-500">Coming soon...</p>
+              </div>
+            </div>
+            <Switch
+              checked={filters.specialOffers.lightningDeals}
+              className={filters.specialOffers.lightningDeals ? "bg-amber-500" : ""}
+              disabled
+              onClick={() =>
+                setFilters((prev) => ({
+                  ...prev,
+                  specialOffers: {
+                    ...prev.specialOffers,
+                    lightningDeals: !prev.specialOffers.lightningDeals,
+                  },
+                }))
+              }
+            />
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="flex gap-2 mt-2">
-        <Button className="flex-1 bg-leaf-background text-white" onClick={clearFilters}>
+      {/* Reset Button */}
+      <div className="pt-4">
+        <Button className="w-full bg-leaf-background text-white" onClick={clearFilters}>
           Reset Filters
         </Button>
       </div>
-    </div>
+    </>
   ), [filters, clearFilters])
 
   const PaginationControls = () => (
@@ -389,7 +507,7 @@ export default function ProductGrid({ products }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-[275px_1fr] gap-6 mb-6">
 
           {/* Filter Sidebar */}
-          <div className="hidden md:flex flex-col h-[700px] bg-white p-4 border border-slate-200 rounded-lg shadow-sm">
+          <div className="hidden md:flex flex-col gap-6 p-4 bg-white rounded-xl shadow-sm border border-slate-200 h-[900px]">
             {FilterComponent}
           </div>
 
