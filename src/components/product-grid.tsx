@@ -115,8 +115,13 @@ export default function ProductGrid({ products }: Props) {
 
     // Filter by special offers
     if (filters.specialOffers.coupon) {
-      result = result.filter((product) => product.clip_coupon_savings && product.clip_coupon_savings !== "")
+      result = result.filter(
+        (product) =>
+          (Number(product.clip_coupon_savings) > 0 && product.clip_coupon_savings !== "") ||
+          Number(product.clip_coupon_percent_savings) > 0
+      )
     }
+
     if (filters.specialOffers.promoCode) {
       result = result.filter((product) => product.promo_code && product.promo_code !== "")
     }
