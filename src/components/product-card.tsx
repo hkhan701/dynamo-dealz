@@ -74,7 +74,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         </div>
 
         {/* Additional savings info */}
-        {(Number(product.clip_coupon_savings) > 0 || product.promo_code || product.clip_coupon_percent_savings) && (
+        {(Number(product.clip_coupon_savings) > 0 || product.promo_code) && (
           <div className="rounded-md bg-muted/50 p-2 text-xs space-y-2 border border-muted shadow-sm">
 
             {/* Clip Coupon */}
