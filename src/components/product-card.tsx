@@ -22,7 +22,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
   const lastUpdatedRelative = formatDistanceToNow(lastUpdated)
 
   return (
-    <Card className="overflow-hidden transition-all hover:shadow-lg">
+    <Card className="flex flex-col justify-between h-full overflow-hidden transition-all hover:shadow-lg">
       <div className="relative">
         {/* Discount badge */}
         {Number(product.final_savings_percent) > 0 && (
@@ -119,7 +119,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         )}
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-3 p-3 sm:p-4 pt-0">
+      <CardFooter className="flex flex-col gap-3 p-3 sm:p-4 pt-0 mt-auto">
         <div className="flex flex-wrap w-full gap-2">
           {/* View Deal Button */}
           <Button asChild className="flex-1 gap-2 group bg-leaf-background hover:bg-leaf-background/80 text-white">
