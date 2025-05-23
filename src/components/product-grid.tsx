@@ -178,7 +178,7 @@ export default function ProductGrid({ products }: Props) {
   }, [])
 
   const FilterComponent = useMemo(() => (
-    <>
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h4 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
@@ -554,7 +554,7 @@ export default function ProductGrid({ products }: Props) {
           Reset Filters
         </Button>
       </div>
-    </>
+    </div>
   ), [filters, clearFilters, showAllCategories])
 
   const PaginationControls = () => (
