@@ -4,8 +4,8 @@ export interface Product {
   list_price: number
   current_price: number
   percent_off_list_price: string
-  clip_coupon_savings: string
-  clip_coupon_percent_savings: string
+  clip_coupon_savings: number
+  clip_coupon_percent_savings: number
   promo_code: string
   promo_code_percent_off: string
   final_savings_percent: number

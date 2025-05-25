@@ -117,8 +117,7 @@ export default function ProductGrid({ products }: Props) {
     if (filters.specialOffers.coupon) {
       result = result.filter(
         (product) =>
-          (Number(product.clip_coupon_savings) > 0 && product.clip_coupon_savings !== "") ||
-          Number(product.clip_coupon_percent_savings) > 0
+          product.clip_coupon_savings > 0 || product.clip_coupon_percent_savings > 0
       )
     }
 
