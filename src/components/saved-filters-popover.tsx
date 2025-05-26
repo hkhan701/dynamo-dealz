@@ -154,7 +154,9 @@ export default function SavedFiltersPopover({ filters, setFilters }: Props) {
     return summary.slice(0, 3) // Show max 3 items
   }
 
-  const filteredSaved = saved.filter(
+  const sortedSaved = [...saved].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+  const filteredSaved = sortedSaved.filter(
     (f) =>
       f.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (f.description && f.description.toLowerCase().includes(searchQuery.toLowerCase())),
