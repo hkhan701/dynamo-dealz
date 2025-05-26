@@ -175,8 +175,6 @@ export default function ProductGrid({ products }: Props) {
         </h4>
       </div>
 
-      <SavedFiltersPopover filters={filters} setFilters={setFilters} />
-
       {/* Price Range */}
       <section className="space-y-3">
         <h5 className="text-sm font-medium text-slate-600">Price Range</h5>
@@ -603,6 +601,8 @@ export default function ProductGrid({ products }: Props) {
                   Filters
                 </Button>
               </div>
+
+              <SavedFiltersPopover filters={filters} setFilters={setFilters} />
 
               {/* Status + Controls */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full gap-4 sm:gap-6">
