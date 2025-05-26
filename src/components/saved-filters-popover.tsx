@@ -45,17 +45,8 @@ import {
   Tag,
   Ticket,
 } from "lucide-react"
-import type { FilterState } from "@/types/filter-state"
+import type { FilterState, SavedFilter } from "@/types/filter-state"
 import { GENERAL_CATEGORIES } from "@/lib/category"
-
-interface SavedFilter {
-  id: number
-  label: string
-  value: FilterState
-  createdAt: Date
-  isFavorite: boolean
-  description?: string
-}
 
 interface Props {
   filters: FilterState

@@ -9,3 +9,12 @@ export interface FilterState {
     lightningDeals: boolean;
   };
 }
+
+export interface SavedFilter {
+  id: number
+  label: string
+  value: FilterState
+  createdAt: Date
+  isFavorite: boolean
+  description?: string
+}
