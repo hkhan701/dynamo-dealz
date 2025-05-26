@@ -24,23 +24,12 @@ import { getPageNumbers, cn } from "@/lib/utils"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { TabsList, Tabs, TabsTrigger } from "@/components/ui/tabs"
 import { GENERAL_CATEGORIES } from "@/lib/category"
+import { FilterState } from "@/types/filter-state"
+import SavedFiltersPopover from "./saved-filters-popover"
 
 interface Props {
   products: Product[]
 }
-
-interface FilterState {
-  priceRange: [number, number];
-  minDiscount: number;
-  sortBy?: string;
-  categories: string[];
-  specialOffers: {
-    coupon: boolean;
-    promoCode: boolean;
-    lightningDeals: boolean;
-  };
-}
-
 
 export default function ProductGrid({ products }: Props) {
   const [query, setQuery] = useState("")
@@ -185,6 +174,8 @@ export default function ProductGrid({ products }: Props) {
           Filters
         </h4>
       </div>
+
+      <SavedFiltersPopover filters={filters} setFilters={setFilters} />
 
       {/* Price Range */}
       <section className="space-y-3">
