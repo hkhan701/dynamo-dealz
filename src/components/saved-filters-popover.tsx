@@ -457,14 +457,9 @@ function FilterItem({
   onPreview,
   getFilterSummary,
 }: FilterItemProps) {
-  const [showActions, setShowActions] = useState(false)
 
   return (
-    <div
-      className="group p-3 rounded-lg border hover:bg-muted/50 transition-colors mb-3"
-      onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => setShowActions(false)}
-    >
+    <div className="p-3 rounded-lg border hover:bg-muted/50 transition-colors mb-3">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
@@ -472,7 +467,7 @@ function FilterItem({
             <Button
               variant="ghost"
               size="sm"
-              className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="h-5 w-5 p-0"
               onClick={() => onToggleFavorite(filter.id)}
             >
               {filter.isFavorite ? (
@@ -511,7 +506,7 @@ function FilterItem({
               <Button
                 variant="ghost"
                 size="sm"
-                className={`h-7 w-7 p-0 transition-opacity ${showActions ? "opacity-100" : "opacity-0"}`}
+                className="h-7 w-7 p-0 opacity-100"
               >
                 <MoreHorizontal className="h-3 w-3" />
               </Button>
