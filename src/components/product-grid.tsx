@@ -105,8 +105,7 @@ export default function ProductGrid({ products }: Props) {
     // Filter by special offers
     if (filters.specialOffers.coupon) {
       result = result.filter(
-        (product) =>
-          product.clip_coupon_savings > 0 || product.clip_coupon_percent_savings > 0
+        (product) => product.clip_coupon_savings > 0 || product.clip_coupon_percent_savings > 0 || product.checkout_discount_amount > 0 || product.checkout_discount_percent > 0
       )
     }
 
