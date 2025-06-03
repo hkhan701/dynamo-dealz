@@ -6,6 +6,8 @@ export interface Product {
   percent_off_list_price: string
   clip_coupon_savings: number
   clip_coupon_percent_savings: number
+  checkout_discount_amount: number
+  checkout_discount_percent: number
   promo_code: string
   promo_code_percent_off: string
   final_savings_percent: number

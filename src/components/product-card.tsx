@@ -74,52 +74,74 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         </div>
 
         {/* Additional savings info */}
-        {(product.clip_coupon_savings > 0 || product.promo_code || product.clip_coupon_percent_savings > 0) && (
-          <div className="rounded-md bg-muted/50 p-2 text-xs space-y-2 border border-muted shadow-sm">
+        {(product.clip_coupon_savings > 0 ||
+          product.clip_coupon_percent_savings > 0 ||
+          product.promo_code ||
+          product.checkout_discount_amount > 0 ||
+          product.checkout_discount_percent > 0) && (
+            <div className="rounded-md bg-muted/50 p-2 text-xs space-y-2 border border-muted shadow-sm">
+              {[
+                // Clip Coupon - Percent
+                product.clip_coupon_percent_savings > 0 && {
+                  label: 'Coupon',
+                  value: `-${product.clip_coupon_percent_savings}%`,
+                },
 
-            {/* Clip Coupon */}
-            {(product.clip_coupon_percent_savings > 0 || product.clip_coupon_savings > 0) && (
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <span>Coupon</span>
-                </div>
-                <span className="font-semibold text-green-600">
-                  {product.clip_coupon_percent_savings > 0
-                    ? `-${product.clip_coupon_percent_savings}%`
-                    : `-$${product.clip_coupon_savings}`}
-                </span>
-              </div>
-            )}
+                // Clip Coupon - Dollar
+                product.clip_coupon_savings > 0 && {
+                  label: 'Coupon',
+                  value: `-$${product.clip_coupon_savings}`,
+                },
 
+                // Promo Code
+                product.promo_code && {
+                  label: 'Promo',
+                  value: (
+                    <div className="flex items-center gap-1">
+                      <span className="font-mono font-medium">{product.promo_code}</span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(product.promo_code || "");
+                          toast.success(`Promo code copied: ${product.promo_code}`, {
+                            style: {
+                              backgroundColor: '#dcfce7',
+                              color: '#166534',
+                            },
+                          });
+                        }}
+                        className="p-1 rounded hover:bg-muted transition"
+                        aria-label="Copy promo code"
+                      >
+                        <Copy className="w-3 h-3 text-muted-foreground" />
+                      </button>
+                    </div>
+                  ),
+                },
 
-            {/* Promo Code with Copy */}
-            {product.promo_code && (
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <span>Promo</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="font-mono font-medium">{product.promo_code}</span>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(product.promo_code || "")
-                      toast.success(`Promo code copied: ${product.promo_code}`, {
-                        style: {
-                          backgroundColor: '#dcfce7', // Tailwind green-100
-                          color: '#166534'            // Tailwind green-700
-                        }
-                      })
-                    }}
-                    className="p-1 rounded hover:bg-muted transition"
-                    aria-label="Copy promo code"
-                  >
-                    <Copy className="w-3 h-3 text-muted-foreground" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+                // Checkout Discount - Percent
+                product.checkout_discount_percent > 0 && {
+                  label: 'Checkout Discount',
+                  value: `-${product.checkout_discount_percent}%`,
+                },
+
+                // Checkout Discount - Dollar
+                product.checkout_discount_amount > 0 && {
+                  label: 'Checkout Discount',
+                  value: `-$${product.checkout_discount_amount}`,
+                },
+              ]
+                .filter(Boolean)
+                .map((discount, idx) => (
+                  <div key={idx} className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                      <span>{discount.label}</span>
+                    </div>
+                    <span className="font-semibold text-green-600">{discount.value}</span>
+                  </div>
+                ))}
+            </div>
+          )}
+
       </CardContent>
 
       <CardFooter className="flex flex-col gap-3 p-3 sm:p-4 pt-0 mt-auto">
