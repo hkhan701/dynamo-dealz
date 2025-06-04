@@ -34,20 +34,34 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
 
         {/* Product image */}
         <div className="relative flex h-40 sm:h-48 items-center justify-center bg-white p-2 sm:p-4">
-          <Image
-            src={product.image_link}
-            alt={product.name}
-            width={150}
-            height={150}
-            className="h-full object-contain hover:scale-105 transition-transform duration-300"
-            unoptimized
-          />
+          <Link
+            href={getAffiliateLink(product.hyperlink)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex"
+          >
+            <Image
+              src={product.image_link}
+              alt={product.name}
+              width={150}
+              height={150}
+              className="object-contain max-h-36 sm:max-h-44 max-w-full hover:scale-105 transition-transform duration-300"
+              unoptimized
+            />
+          </Link>
         </div>
       </div>
 
       <CardContent className="grid gap-2 p-3 sm:p-4">
         <h3 className="line-clamp-2 text-sm font-medium leading-tight" title={product.name}>
-          {truncatedName}
+          <Link
+            href={getAffiliateLink(product.hyperlink)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline text-primary hover:text-primary/80 transition-colors"
+          >
+            {truncatedName}
+          </Link>
         </h3>
 
         {/* Rating */}
