@@ -304,19 +304,19 @@ export default function ProductGrid({ products }: Props) {
             <SelectItem value="newest">
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-muted-foreground" />
-                <span>Newest</span>
+                <span>Latest Deals</span>
               </div>
             </SelectItem>
             <SelectItem value="rating">
               <div className="flex items-center gap-2">
                 <Star className="h-4 w-4 text-yellow-400" />
-                <span>Review Rating</span>
+                <span>Top Rated</span>
               </div>
             </SelectItem>
             <SelectItem value="reviews">
               <div className="flex items-center gap-2">
                 <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                <span>Number of Reviews</span>
+                <span>Most Reviewed</span>
               </div>
             </SelectItem>
             <SelectItem value="price-asc">
@@ -343,7 +343,14 @@ export default function ProductGrid({ products }: Props) {
 
       {/* Categories */}
       <section className="space-y-3 border-t pt-4">
-        <h5 className="text-sm font-medium text-slate-600 transition-opacity duration-300 hover:opacity-80">Categories</h5>
+        <div className="flex items-center justify-between">
+          <h5 className="text-sm font-medium text-slate-600">Shop by Category</h5>
+          {filters.categories.length > 0 && (
+            <span className="text-xs font-medium px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">
+              {filters.categories.length} selected
+            </span>
+          )}
+        </div>
 
         <div
           className={cn(
@@ -368,21 +375,24 @@ export default function ProductGrid({ products }: Props) {
                     })
                   }
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-md p-2 text-sm capitalize transition-all duration-300",
-                    "transform hover:translate-x-1 hover:shadow-sm",
+                    "flex w-full items-center gap-2 rounded-md p-2 text-sm capitalize transition-all duration-200",
+                    "hover:translate-x-0.5 hover:shadow-sm",
                     isSelected
-                      ? "bg-zinc-50 text-black"
-                      : "hover:bg-slate-50 text-muted-foreground"
+                      ? "bg-gradient-to-r from-slate-50 to-slate-100 text-slate-900 border-l-2 border-leaf-background"
+                      : "hover:bg-slate-50 text-slate-600"
                   )}
                   style={{
-                    animationDelay: `${index * 50}ms`,
+                    animationDelay: `${index * 30}ms`,
                     animationFillMode: "both"
                   }}
                 >
-                  <Icon className="size-4 shrink-0 transition-transform duration-300 group-hover:scale-110" />
+                  <Icon className={cn(
+                    "size-4 shrink-0 transition-all duration-200",
+                    isSelected ? "text-leaf-background scale-110" : "text-slate-500"
+                  )} />
                   <span className="truncate">{label}</span>
                   {isSelected && (
-                    <Check className="ml-auto size-4 shrink-0 stroke-[3] animate-appear" />
+                    <Check className="ml-auto size-4 shrink-0 stroke-[2.5] text-leaf-background animate-in fade-in-50 duration-200" />
                   )}
                 </button>
               );
@@ -391,12 +401,13 @@ export default function ProductGrid({ products }: Props) {
 
         <button
           onClick={() => setShowAllCategories((prev) => !prev)}
-          className="w-full text-xs text-muted-foreground transition-all duration-300 hover:underline hover:text-slate-700 pt-1 flex items-center justify-center gap-1"
+          className="w-full text-xs text-slate-500 transition-all duration-200 hover:text-slate-700 hover:underline pt-2 flex items-center justify-center gap-1"
         >
-          <span>{showAllCategories ? "Show less" : "Show more"}</span>
-          <span className={`transition-transform duration-300 ${showAllCategories ? "rotate-180" : "rotate-0"}`}>
-            <ChevronDown className="h-4 w-4" />
-          </span>
+          <span>{showAllCategories ? "Show less categories" : "View all categories"}</span>
+          <ChevronDown className={cn(
+            "h-4 w-4 transition-transform duration-300",
+            showAllCategories ? "rotate-180" : "rotate-0"
+          )} />
         </button>
       </section>
 

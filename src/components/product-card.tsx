@@ -20,6 +20,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, lastUpdated }: ProductCardProps) {
   const truncatedName = product.name.length > 80 ? `${product.name.substring(0, 80)}...` : product.name
   const lastUpdatedRelative = formatDistanceToNow(lastUpdated)
+  const savingsAmount = product.list_price > 0 ? product.list_price - product.final_price : 0
 
   return (
     <Card className="flex flex-col justify-between h-full overflow-hidden transition-all hover:shadow-lg">
@@ -80,11 +81,20 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         </div>
 
         {/* Price info */}
-        <div className="flex items-end gap-2 mt-1">
-          <span className="text-xl font-bold text-primary">${product.final_price.toFixed(2)}</span>
-          {product.list_price > 0 && (
-            <span className="text-sm text-muted-foreground line-through mb-0.5">${product.list_price.toFixed(2)}</span>
-          )}
+        <div className="space-y-2">
+          <div className="flex items-end gap-2">
+            <span className="text-2xl font-bold text-primary">${product.final_price.toFixed(2)}</span>
+            {product.list_price > 0 && (
+              <div className="flex flex-col">
+                <span className="text-sm text-muted-foreground line-through">${product.list_price.toFixed(2)}</span>
+                {savingsAmount > 0 && (
+                  <span className="text-xs font-semibold text-green-600">
+                    Save ${savingsAmount.toFixed(2)}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Additional savings info */}
