@@ -176,16 +176,24 @@ export default function ProductGrid({ products }: Props) {
 
       {/* Price Range */}
       <section className="space-y-3">
-        <h5 className="text-sm font-medium text-slate-600">Price Range</h5>
+        <div className="flex items-center justify-between">
+          <h5 className="text-sm font-medium text-slate-600">Price Range</h5>
+          {(filters.priceRange[0] > 0 || filters.priceRange[1] < 10000) && (
+            <span className="text-xs font-medium px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">
+              ${filters.priceRange[0]} - ${filters.priceRange[1]}
+            </span>
+          )}
+        </div>
         <div className="flex flex-col gap-3 sm:flex-row">
           <div className="flex-1">
-            <label className="text-xs text-muted-foreground mb-1 block">Min</label>
+            <label className="text-xs text-muted-foreground mb-1 block">From</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
               <Input
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
+                placeholder="0"
                 value={filters.priceRange[0].toString()}
                 onChange={(e) => {
                   const cleaned = e.target.value.replace(/^0+(?!$)/, "")
@@ -201,13 +209,14 @@ export default function ProductGrid({ products }: Props) {
           </div>
 
           <div className="flex-1">
-            <label className="text-xs text-muted-foreground mb-1 block">Max</label>
+            <label className="text-xs text-muted-foreground mb-1 block">To</label>
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
               <Input
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
+                placeholder="Any"
                 value={filters.priceRange[1].toString()}
                 onChange={(e) => {
                   const cleaned = e.target.value.replace(/^0+(?!$)/, "")
@@ -227,10 +236,10 @@ export default function ProductGrid({ products }: Props) {
       {/* Minimum Discount */}
       <section className="space-y-3 border-t pt-4">
         <div className="flex items-center justify-between">
-          <h5 className="text-sm font-medium text-slate-600">Minimum Discount</h5>
+          <h5 className="text-sm font-medium text-slate-600">Minimum Savings</h5>
           {filters.minDiscount > 0 && (
-            <span className="text-xs font-medium px-2 py-0.5 bg-green-100 text-green-700 rounded-full">
-              {filters.minDiscount}%+
+            <span className="text-xs font-bold px-2 py-0.5 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-full border border-green-200">
+              {filters.minDiscount}%+ OFF
             </span>
           )}
         </div>
@@ -246,29 +255,34 @@ export default function ProductGrid({ products }: Props) {
               <TabsTrigger
                 key={discount}
                 value={discount.toString()}
-                className="text-xs py-1 data-[state=active]:bg-leaf-background data-[state=active]:text-white text-slate-600"
+                className={cn(
+                  "text-xs py-1 transition-all duration-200",
+                  "data-[state=active]:bg-leaf-background data-[state=active]:text-white data-[state=active]:font-medium",
+                  "text-slate-600 hover:bg-slate-100"
+                )}
               >
-                {discount === 0 ? "Any" : `${discount}%+`}
+                {discount === 0 ? "Any" : `${discount}%`}
               </TabsTrigger>
             ))}
           </TabsList>
         </Tabs>
 
         <div className="space-y-2">
-          <label className="text-xs text-muted-foreground">Custom Discount</label>
+          <label className="text-xs text-muted-foreground">Custom Percentage</label>
 
           <div
             className={cn(
               "relative rounded-md border transition-all duration-300 ease-in-out",
               ![0, 10, 25, 50, 70].includes(filters.minDiscount)
-                ? "ring-2 ring-leaf-background border-transparent scale-[1.02]"
-                : "border-slate-200"
+                ? "ring-2 ring-leaf-background border-transparent scale-[1.02] shadow-sm"
+                : "border-slate-200 hover:border-slate-300"
             )}
           >
             <input
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
+              placeholder="Enter %"
               className="w-full py-2 pl-4 pr-7 rounded-md bg-white focus:outline-none"
               value={[0, 10, 25, 50, 70].includes(filters.minDiscount) ? "" : filters.minDiscount}
               onChange={(e) => {
@@ -290,7 +304,7 @@ export default function ProductGrid({ products }: Props) {
 
       {/* Sort By */}
       <section className="space-y-3 border-t pt-4">
-        <h5 className="text-sm font-medium text-slate-600">Sort By</h5>
+        <h5 className="text-sm font-medium text-slate-600">Sort Results</h5>
         <Select
           value={filters.sortBy}
           onValueChange={(value) =>
