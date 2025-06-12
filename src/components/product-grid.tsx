@@ -40,6 +40,8 @@ export default function ProductGrid({ products }: Props) {
   const [itemsPerPage, setItemsPerPage] = useState(12)
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
   const [showAllCategories, setShowAllCategories] = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState(query)
+
 
 
   // Enhanced filter state
@@ -64,21 +66,31 @@ export default function ProductGrid({ products }: Props) {
     })
   }, [products])
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(query)
+    }, 300) // Adjust delay to your UX preference (300ms is common)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [query])
+
   // Run search when query changes
   useEffect(() => {
     setIsLoading(true)
 
-    if (query.trim() === "") {
+    if (debouncedQuery.trim() === "") {
       setSearchResults(products)
     } else {
-      const fuseResults = fuse.search(query)
+      const fuseResults = fuse.search(debouncedQuery)
       setSearchResults(fuseResults.map((res) => res.item))
     }
 
     // Reset to first page when search query changes
     setCurrentPage(1)
     setIsLoading(false)
-  }, [query, fuse, products])
+  }, [debouncedQuery, fuse, products])
 
   // Apply filters to search results
   useEffect(() => {
