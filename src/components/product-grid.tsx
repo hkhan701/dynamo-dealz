@@ -158,7 +158,10 @@ export default function ProductGrid({ products }: Props) {
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems)
   const currentItems = filteredResults.slice(startIndex, endIndex)
 
-  const handlePageChange = (page: number) => setCurrentPage(page)
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   const clearFilters = useCallback(() => {
     setFilters({
