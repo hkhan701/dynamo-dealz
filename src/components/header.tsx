@@ -18,12 +18,7 @@ export default function Header() {
     if (platform === "copy") {
       navigator.clipboard.writeText(WEBSITE_URL)
       setShowShareOptions(false)
-      toast.success(UI_MESSAGES.linkCopied, {
-        style: {
-          backgroundColor: '#dcfce7', // Tailwind green-100
-          color: '#166534'            // Tailwind green-700
-        }
-      })
+      toast.success(UI_MESSAGES.linkCopied)
       return
     }
 

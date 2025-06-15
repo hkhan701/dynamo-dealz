@@ -122,12 +122,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
                         <button
                           onClick={() => {
                             navigator.clipboard.writeText(product.promo_code || "");
-                            toast.success(`Promo code copied: ${product.promo_code}`, {
-                              style: {
-                                backgroundColor: '#dcfce7',
-                                color: '#166534',
-                              },
-                            });
+                            toast.success(`Promo code copied: ${product.promo_code}`);
                           }}
                           className="p-1 rounded hover:bg-muted transition"
                           aria-label="Copy promo code"
@@ -184,12 +179,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             size="icon"
             onClick={() => {
               navigator.clipboard.writeText(getAffiliateLink(product.hyperlink))
-              toast.success(UI_MESSAGES.linkCopied, {
-                style: {
-                  backgroundColor: '#dcfce7', // Tailwind green-100
-                  color: '#166534'            // Tailwind green-700
-                }
-              })
+              toast.warning(UI_MESSAGES.linkCopied)
             }}
             className="h-10 w-full sm:w-10 flex items-center justify-center gap-2 text-sm"
           >

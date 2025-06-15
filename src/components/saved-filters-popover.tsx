@@ -113,7 +113,7 @@ export default function SavedFiltersPopover({ filters, setFilters }: Props) {
 
   const applyFilter = (f: SavedFilter) => {
     setFilters(f.value)
-    toast(`"${f.label}" filter has been applied.`)
+    toast.success(`"${f.label}" filter has been applied.`)
   }
 
   const deleteFilter = (id: number) => {
