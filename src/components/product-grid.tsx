@@ -26,6 +26,7 @@ import { TabsList, Tabs, TabsTrigger } from "@/components/ui/tabs"
 import { GENERAL_CATEGORIES } from "@/lib/category"
 import { FilterState } from "@/types/filter-state"
 import SavedFiltersPopover from "./saved-filters-popover"
+import { toast } from "sonner"
 
 interface Props {
   products: Product[]
@@ -177,6 +178,7 @@ export default function ProductGrid({ products }: Props) {
     })
     setCurrentPage(1)
     setIsFilterSheetOpen(false)
+    toast.success("Filters cleared successfully")
   }, [])
 
   const FilterComponent = useMemo(() => (
