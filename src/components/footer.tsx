@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Facebook } from "lucide-react"
 
 export default function Footer() {
   return (
@@ -37,6 +38,25 @@ export default function Footer() {
             </div>
             <p className="text-xs text-slate-400 mt-2">Newsletter feature is coming soon!</p>
           </div>
+        </div>
+
+        {/* Facebook Group CTA */}
+        <div className="mt-12 bg-blue-900/30 border border-blue-700 rounded-xl px-6 py-5 text-center shadow-inner">
+          <h4 className="text-white text-lg font-semibold flex items-center justify-center gap-2 mb-2">
+            <Facebook className="h-5 w-5 text-blue-500" />
+            Join Our Facebook Group
+          </h4>
+          <p className="text-sm text-slate-300 mb-4 max-w-xl mx-auto">
+            Connect with other deal hunters across Canada. Share tips, ask questions, and never miss a bargain.
+          </p>
+          <a
+            href="https://www.facebook.com/groups/1382548942690077" // Replace with your actual group link
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-full transition"
+          >
+            Join Now - It&apos;s Free
+          </a>
         </div>
 
         {/* Divider */}
