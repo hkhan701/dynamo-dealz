@@ -677,15 +677,14 @@ export default function ProductGrid({ products }: Props) {
               </div>
             </div>
 
-
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute left-5 top-1/2 h-6 w-6 -translate-y-1/2 text-red-500" />
               <Input
                 type="search"
                 placeholder={UI_MESSAGES.searchPlaceholder}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full rounded-full pl-12 pr-4 py-2 shadow-sm border border-muted-foreground/20 focus-visible:ring-2 focus-visible:ring-ring"
+                className="w-full rounded-full pl-14 pr-6 py-4 text-lg shadow-lg border-2 focus-visible:ring-4 focus-visible:ring-red-200 border-red-400 transition-all duration-200"
               />
             </div>
 
