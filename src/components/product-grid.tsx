@@ -115,6 +115,11 @@ export default function ProductGrid({ products }: Props) {
       )
     }
 
+    // Filter by lightning deals
+    if (filters.specialOffers.lightningDeals) {
+      result = result.filter((product) => product.is_lightning_deal)
+    }
+
     // Filter by special offers
     if (filters.specialOffers.coupon) {
       result = result.filter(
@@ -562,7 +567,6 @@ export default function ProductGrid({ products }: Props) {
             <Switch
               checked={filters.specialOffers.lightningDeals}
               className={filters.specialOffers.lightningDeals ? "bg-amber-500" : ""}
-              disabled
               onClick={() =>
                 setFilters((prev) => ({
                   ...prev,

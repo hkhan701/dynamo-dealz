@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Clock, Star, Copy, ArrowUpRight, ArrowDown } from "lucide-react"
+import { Clock, Star, Copy, ArrowUpRight, ArrowDown, Zap } from "lucide-react"
 
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -33,8 +33,15 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
           </Badge>
         )}
 
+        {product.is_lightning_deal && (
+          <Badge className="absolute left-2 top-9 z-10 bg-yellow-500 hover:bg-yellow-600 text-xs animate-pulse">
+            <Zap className="mr-1 h-4 w-4" />
+            Lightning Deal
+          </Badge>
+        )}
+
         {/* Product image */}
-        <div className="relative flex h-40 sm:h-48 items-center justify-center bg-white p-2 sm:p-4">
+        <div className="relative flex h-40 sm:h-48 items-center justify-center bg-white p-2 sm:p-4 pt-10 sm:pt-10">
           <Link
             href={getAffiliateLink(product.hyperlink)}
             target="_blank"
