@@ -1,4 +1,6 @@
-'use client'
+"use client"
+
+import type React from "react"
 
 import Image from "next/image"
 import Link from "next/link"
@@ -10,10 +12,10 @@ import { Button } from "@/components/ui/button"
 import { formatDistanceToNow, getAffiliateLink } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
 import { toast } from "sonner"
-import { Product } from "@/types/product"
+import type { Product } from "@/types/product"
 
 interface ProductCardProps {
-  product: Product,
+  product: Product
   lastUpdated: Date
 }
 
@@ -23,25 +25,30 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
   const savingsAmount = product.list_price > 0 ? product.list_price - product.final_price : 0
 
   return (
-    <Card className="flex flex-col justify-between h-full overflow-hidden transition-all hover:shadow-lg">
-      <div className="relative">
-        {/* Discount badge */}
-        {Number(product.final_savings_percent) > 0 && (
-          <Badge className="absolute left-2 top-2 z-10 bg-red-600 hover:bg-red-700 text-xs">
-            <ArrowDown className="mr-1 h-4 w-4" />
-            {product.final_savings_percent}% price drop
-          </Badge>
-        )}
+    <Card className="group relative flex flex-col h-full overflow-hidden bg-white border-0 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
 
-        {product.is_lightning_deal && (
-          <Badge className="absolute left-2 top-9 z-10 bg-yellow-500 hover:bg-yellow-600 text-xs animate-pulse">
-            <Zap className="mr-1 h-4 w-4" />
-            Lightning Deal
-          </Badge>
-        )}
+      <div className="absolute inset-0 bg-gradient-to-br from-rose-50/50 via-transparent to-red-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+      <div className="relative">
+        {/* Badges */}
+        <div className="absolute left-3 top-3 z-10 flex flex-col gap-2">
+          {Number(product.final_savings_percent) > 0 && (
+            <Badge className="bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white border-0 shadow-lg text-xs font-medium">
+              <ArrowDown className="mr-1 h-3 w-3" />
+              {product.final_savings_percent}% OFF
+            </Badge>
+          )}
+
+          {product.is_lightning_deal && (
+            <Badge className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white border-0 shadow-lg text-xs font-medium animate-pulse">
+              <Zap className="mr-1 h-3 w-3" />
+              Lightning Deal
+            </Badge>
+          )}
+        </div>
 
         {/* Product image */}
-        <div className="relative flex h-40 sm:h-48 items-center justify-center bg-white p-2 sm:p-4 pt-10 sm:pt-10">
+        <div className="relative flex h-48 items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100/50 p-6">
           <Link
             href={getAffiliateLink(product.hyperlink)}
             target="_blank"
@@ -49,55 +56,54 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             className="inline-flex"
           >
             <Image
-              src={product.image_link}
+              src={product.image_link || "/placeholder.svg"}
               alt={product.name}
-              width={150}
-              height={150}
-              className="object-contain max-h-36 sm:max-h-44 max-w-full hover:scale-105 transition-transform duration-300"
+              width={160}
+              height={160}
+              className="object-contain max-h-40 max-w-full hover:scale-110 transition-transform duration-500 drop-shadow-sm"
               unoptimized
             />
           </Link>
         </div>
       </div>
 
-      <CardContent className="grid gap-2 p-3 sm:p-4">
-        <h3 className="line-clamp-2 text-sm font-medium leading-tight" title={product.name}>
+      <CardContent className="flex-1 p-4 space-y-3">
+        {/* Product name */}
+        <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900" title={product.name}>
           <Link
             href={getAffiliateLink(product.hyperlink)}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:underline text-primary hover:text-primary/80 transition-colors"
+            className="hover:text-rose-600 transition-colors duration-200 hover:underline"
           >
             {truncatedName}
           </Link>
         </h3>
 
         {/* Rating */}
-        <div className="flex items-center gap-1.5 text-xs">
+        <div className="flex items-center gap-2">
           {product.rating && product.rating_count > 0 ? (
             <>
-              <div className="flex items-center bg-amber-50 px-2 py-1 rounded-full">
-                <Star className="h-3.5 w-3.5 text-amber-400 fill-amber-400 mr-1" />
-                <span className="font-semibold text-amber-700">{product.rating.toFixed(1)}</span>
+              <div className="flex items-center bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                <Star className="h-3 w-3 text-amber-500 fill-amber-500 mr-1" />
+                <span className="font-semibold text-amber-700 text-xs">{product.rating.toFixed(1)}</span>
               </div>
-              <span className="text-muted-foreground" title="Number of Ratings">({product.rating_count.toLocaleString()})</span>
+              <span className="text-xs text-gray-500">({product.rating_count.toLocaleString()})</span>
             </>
           ) : (
-            <span className="text-muted-foreground italic">No Ratings</span>
+            <span className="text-xs text-gray-400 italic">No ratings yet</span>
           )}
         </div>
 
-        {/* Price info */}
+        {/* Price section */}
         <div className="space-y-2">
-          <div className="flex items-end gap-2">
-            <span className="text-2xl font-bold text-primary">${product.final_price.toFixed(2)}</span>
+          <div className="flex flex-wrap items-end gap-2 min-w-0">
+            <span className="text-2xl font-bold text-gray-900 break-words">{`$${product.final_price.toFixed(2)}`}</span>
             {product.list_price > 0 && (
-              <div className="flex flex-col">
-                <span className="text-sm text-muted-foreground line-through">${product.list_price.toFixed(2)}</span>
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm text-gray-400 line-through truncate">{`$${product.list_price.toFixed(2)}`}</span>
                 {savingsAmount > 0 && (
-                  <span className="text-xs font-semibold text-green-600">
-                    Save ${savingsAmount.toFixed(2)}
-                  </span>
+                  <span className="text-xs font-semibold text-emerald-600 truncate">{`Save $${savingsAmount.toFixed(2)}`}</span>
                 )}
               </div>
             )}
@@ -110,7 +116,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
           product.promo_code ||
           product.checkout_discount_amount > 0 ||
           product.checkout_discount_percent > 0) && (
-            <div className="rounded-md bg-muted/50 p-2 text-xs space-y-2 border border-muted shadow-sm">
+            <div className="rounded-md bg-green-100 p-2 text-xs space-y-2 border border-muted shadow-sm">
               {(
                 [
                   product.clip_coupon_percent_savings > 0 && {
@@ -162,20 +168,21 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
 
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-3 p-3 sm:p-4 pt-0 mt-auto">
+      <CardFooter className="flex flex-col p-4 pt-0 space-y-3">
+        {/* Action buttons */}
         <div className="flex flex-wrap w-full gap-2">
-          {/* View Deal Button */}
-          <Button asChild className="flex-1 gap-2 group bg-leaf-background hover:bg-leaf-background/80 text-white">
+          <Button
+            asChild
+            className="flex-1 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 group"
+          >
             <Link
               href={getAffiliateLink(product.hyperlink)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2"
             >
-              View Deal
-              <ArrowUpRight
-                className="h-4 w-4 transform transition-transform duration-300 group-hover:rotate-45 group-hover:translate-x-1"
-              />
+              <span className="font-medium">View Deal</span>
+              <ArrowUpRight className="h-4 w-4 transform transition-transform duration-300 group-hover:rotate-45 group-hover:translate-x-1" />
             </Link>
           </Button>
 
@@ -186,12 +193,12 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
             size="icon"
             onClick={() => {
               navigator.clipboard.writeText(getAffiliateLink(product.hyperlink))
-              toast.warning(UI_MESSAGES.linkCopied)
+              toast.success(UI_MESSAGES.linkCopied)
             }}
             className="h-10 w-full sm:w-10 flex items-center justify-center gap-2 text-sm"
           >
-            <Copy className="h-4 w-4" />
-            <span className="block sm:hidden">Copy Link</span>
+            <Copy className="h-4 w-4 text-gray-600" />
+            <span className="block sm:hidden">Copy link</span>
           </Button>
         </div>
 

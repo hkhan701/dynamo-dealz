@@ -561,7 +561,7 @@ export default function ProductGrid({ products }: Props) {
                 >
                   Lightning Deals
                 </span>
-                <p className="text-xs text-slate-500">Coming soon...</p>
+                <p className="text-xs text-slate-500">Limited time deals</p>
               </div>
             </div>
             <Switch
