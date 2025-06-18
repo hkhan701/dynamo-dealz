@@ -27,6 +27,7 @@ import { GENERAL_CATEGORIES } from "@/lib/category"
 import { FilterState } from "@/types/filter-state"
 import SavedFiltersPopover from "./saved-filters-popover"
 import { toast } from "sonner"
+import ActiveFiltersSection from "./active-filters"
 
 interface Props {
   products: Product[]
@@ -693,6 +694,12 @@ export default function ProductGrid({ products }: Props) {
                 className="w-full rounded-full pl-14 pr-6 py-4 text-lg shadow-lg border-2 focus-visible:ring-4 focus-visible:ring-red-200 border-red-400 transition-all duration-200"
               />
             </div>
+
+            <ActiveFiltersSection
+              filters={filters}
+              setFilters={setFilters}
+              clearFilters={clearFilters}
+            />
 
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {isLoading ? (

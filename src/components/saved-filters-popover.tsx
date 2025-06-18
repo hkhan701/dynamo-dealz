@@ -56,6 +56,7 @@ interface Props {
 const LOCAL_STORAGE_KEY = "savedFilters"
 
 export default function SavedFiltersPopover({ filters, setFilters }: Props) {
+  const [open, setOpen] = useState(false);
   const [saved, setSaved] = useState<SavedFilter[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -113,6 +114,7 @@ export default function SavedFiltersPopover({ filters, setFilters }: Props) {
 
   const applyFilter = (f: SavedFilter) => {
     setFilters(f.value)
+    setOpen(false)
     toast.success(`"${f.label}" filter has been applied.`)
   }
 
@@ -173,7 +175,7 @@ export default function SavedFiltersPopover({ filters, setFilters }: Props) {
 
   return (
     <>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="relative">
             <Sliders className="h-4 w-4 mr-2" />
