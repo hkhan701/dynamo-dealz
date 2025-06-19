@@ -100,3 +100,8 @@ export function getPageNumbers(currentPage: number, totalPages: number): (number
 
   return pageNumbers;
 }
+
+export function goToFacebookGroup() {
+    const facebookGroupUrl = "https://www.facebook.com/groups/ohcanadadeals"
+    window.open(facebookGroupUrl, "_blank", "noopener,noreferrer")
+}

@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Facebook } from "lucide-react"
+import { goToFacebookGroup } from "@/lib/utils"
 
 export default function Footer() {
   return (
@@ -49,14 +50,12 @@ export default function Footer() {
           <p className="text-sm text-slate-300 mb-4 max-w-xl mx-auto">
             Connect with other deal hunters across Canada. Share tips, ask questions, and never miss a bargain.
           </p>
-          <a
-            href="https://www.facebook.com/groups/1382548942690077" // Replace with your actual group link
-            target="_blank"
-            rel="noopener noreferrer"
+          <Button
+            onClick={() => goToFacebookGroup()}
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-full transition"
           >
             Join Now - It&apos;s Free
-          </a>
+          </Button>
         </div>
 
         {/* Divider */}

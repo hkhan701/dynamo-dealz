@@ -2,8 +2,8 @@
 
 import { useState, useRef } from "react"
 import Image from "next/image"
-import { Share2, Facebook, Link as LinkIcon, Zap } from "lucide-react"
-import { buildShareUrl, WEBSITE_URL, SHARE_TEXT, useClickOutside } from "@/lib/utils"
+import { Share2, Facebook, Link as LinkIcon, Zap, Users } from "lucide-react"
+import { buildShareUrl, WEBSITE_URL, SHARE_TEXT, useClickOutside, goToFacebookGroup } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
 import { toast } from "sonner"
 
@@ -110,10 +110,18 @@ export default function Header() {
               </button>
             </div>
 
-            {/* Additional incentive text */}
-            <div className="mt-3 pt-3 border-t border-gray-100 text-center">
-              <p className="text-xs text-gray-500">
-                🎁 More shares = Better deals for everyone!
+            {/* Facebook Group Join Button */}
+            <div className="mt-3 pt-3 border-t border-gray-100">
+              <button
+                onClick={() => goToFacebookGroup()}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2"
+                title="Join our Facebook group"
+              >
+                <Users className="h-4 w-4" />
+                Join Our Facebook Group
+              </button>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                🎯 Never miss another bargain!
               </p>
             </div>
           </div>
