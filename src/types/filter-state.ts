@@ -7,6 +7,7 @@ export interface FilterState {
     coupon: boolean;
     promoCode: boolean;
     lightningDeals: boolean;
+    extraOffer: boolean;
   };
 }
 

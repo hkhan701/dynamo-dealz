@@ -1,4 +1,4 @@
-import { X, DollarSign, Percent, Tag, Gift, Ticket, Zap, ArrowDown, ArrowUp, Star, MessageSquare } from 'lucide-react'
+import { X, DollarSign, Percent, Tag, Gift, Ticket, Zap, ArrowDown, ArrowUp, Star, MessageSquare, HandCoins } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { FilterState } from "@/types/filter-state"
 import { GENERAL_CATEGORIES } from "@/lib/category"
@@ -77,6 +77,16 @@ const getActiveFilters = (filters: FilterState) => {
       type: 'offer',
       value: 'lightningDeals',
       icon: Zap
+    })
+  }
+
+  if (filters.specialOffers.extraOffer) {
+    activeFilters.push({
+      id: 'extra',
+      label: 'Extra Offer',
+      type: 'offer',
+      value: 'extraOffer',
+      icon: HandCoins
     })
   }
 

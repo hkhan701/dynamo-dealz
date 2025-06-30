@@ -42,8 +42,9 @@ import {
   MoreHorizontal,
   Eye,
   Gift,
-  Tag,
   Ticket,
+  Zap,
+  HandCoins,
 } from "lucide-react"
 import type { FilterState, SavedFilter } from "@/types/filter-state"
 import { GENERAL_CATEGORIES } from "@/lib/category"
@@ -394,12 +395,14 @@ export default function SavedFiltersPopover({ filters, setFilters }: Props) {
                       const iconMap = {
                         coupon: <Gift className="w-3 h-3" />,
                         promoCode: <Ticket className="w-3 h-3" />,
-                        lightningDeals: <Tag className="w-3 h-3" />
+                        lightningDeals: <Zap className="w-3 h-3" />,
+                        extraOffer: <HandCoins className="w-3 h-3" />,
                       }
                       const labelMap = {
                         coupon: "Clip Coupon",
                         promoCode: "Promo Code",
-                        lightningDeals: "Lightning Deals"
+                        lightningDeals: "Lightning Deals",
+                        extraOffer: "Extra Offer",
                       }
                       return (
                         <Badge key={key} variant="secondary" className="flex items-center gap-1">

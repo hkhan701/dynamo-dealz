@@ -17,7 +17,7 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
-import { Loader2, PackageSearch, Search, Filter, Gift, Ticket, Clock, ArrowDown, ArrowUp, MessageSquare, Percent, Star, Check, ChevronDown } from "lucide-react"
+import { Loader2, PackageSearch, Search, Filter, Gift, Ticket, Clock, ArrowDown, ArrowUp, MessageSquare, Percent, Star, Check, ChevronDown, Zap, HandCoins } from "lucide-react"
 import { UI_MESSAGES } from "@/lib/strings"
 import { Product } from "@/types/product"
 import { getPageNumbers, cn } from "@/lib/utils"
@@ -55,7 +55,8 @@ export default function ProductGrid({ products }: Props) {
     specialOffers: {
       coupon: false,
       promoCode: false,
-      lightningDeals: false
+      lightningDeals: false,
+      extraOffer: false,
     },
   })
 
@@ -132,6 +133,12 @@ export default function ProductGrid({ products }: Props) {
       result = result.filter((product) => product.promo_code && product.promo_code !== "")
     }
 
+    // Filter by extra offers (if applicable)
+    if (filters.specialOffers.extraOffer) {
+      result = result.filter((product) => product.extra_offer && product.extra_offer !== "")
+    }
+
+
     // Sort based on selected criteria
     switch (filters.sortBy) {
       case "newest":
@@ -179,7 +186,8 @@ export default function ProductGrid({ products }: Props) {
       specialOffers: {
         coupon: false,
         promoCode: false,
-        lightningDeals: false
+        lightningDeals: false,
+        extraOffer: false,
       },
     })
     setCurrentPage(1)
@@ -452,6 +460,8 @@ export default function ProductGrid({ products }: Props) {
       <section className="space-y-3 border-t pt-4">
         <h5 className="text-sm font-medium text-slate-600">Special Offers</h5>
         <div className="flex flex-col gap-4">
+
+          {/* Clip coupon */}
           <div
             className={cn(
               "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
@@ -493,6 +503,7 @@ export default function ProductGrid({ products }: Props) {
             />
           </div>
 
+          {/* Promo Code */}
           <div
             className={cn(
               "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
@@ -539,6 +550,7 @@ export default function ProductGrid({ products }: Props) {
             />
           </div>
 
+          {/* Lightning Deals */}
           <div
             className={cn(
               "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
@@ -554,7 +566,7 @@ export default function ProductGrid({ products }: Props) {
                   filters.specialOffers.lightningDeals ? "bg-amber-100" : "bg-slate-100",
                 )}
               >
-                <Gift className={cn("h-4 w-4", filters.specialOffers.lightningDeals ? "text-amber-600" : "text-slate-500")} />
+                <Zap className={cn("h-4 w-4", filters.specialOffers.lightningDeals ? "text-amber-600" : "text-slate-500")} />
               </div>
               <div>
                 <span
@@ -574,6 +586,48 @@ export default function ProductGrid({ products }: Props) {
                   specialOffers: {
                     ...prev.specialOffers,
                     lightningDeals: !prev.specialOffers.lightningDeals,
+                  },
+                }))
+              }
+            />
+          </div>
+
+          {/* Extra Offers */}
+          <div
+            className={cn(
+              "flex items-center justify-between p-3 rounded-lg border transition-all duration-200",
+              filters.specialOffers.extraOffer
+                ? "bg-blue-50 border-blue-200"
+                : "bg-white border-slate-200 hover:bg-slate-50",
+            )}
+          >
+            <div className="flex items-center gap-2 text-sm">
+              <div
+                className={cn(
+                  "flex items-center justify-center w-8 h-8 rounded-full",
+                  filters.specialOffers.extraOffer ? "bg-blue-100" : "bg-slate-100",
+                )}
+              >
+                <HandCoins className={cn("h-4 w-4", filters.specialOffers.extraOffer ? "text-blue-600" : "text-slate-500")} />
+              </div>
+              <div>
+                <span
+                  className={cn("font-medium", filters.specialOffers.extraOffer ? "text-blue-800" : "text-slate-700")}
+                >
+                  Extra Offers
+                </span>
+                <p className="text-xs text-slate-500">Products with additional offers</p>
+              </div>
+            </div>
+            <Switch
+              checked={filters.specialOffers.extraOffer}
+              className={filters.specialOffers.extraOffer ? "bg-blue-500" : ""}
+              onClick={() =>
+                setFilters((prev) => ({
+                  ...prev,
+                  specialOffers: {
+                    ...prev.specialOffers,
+                    extraOffer: !prev.specialOffers.extraOffer,
                   },
                 }))
               }

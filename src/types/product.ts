@@ -10,6 +10,7 @@ export interface Product {
   checkout_discount_percent: number
   promo_code: string
   promo_code_percent_off: string
+  extra_offer: string
   final_savings_percent: number
   final_price: number
   hyperlink: string
