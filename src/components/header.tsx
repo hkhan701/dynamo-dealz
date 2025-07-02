@@ -84,7 +84,7 @@ export default function Header() {
                   className="flex items-center gap-2 px-3 py-2 text-gray-400"
                 >
                   <Image src="http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg" alt="USA Flag" width={20} height={15} />
-                  <span>USA (Coming Soon)</span>
+                  <span>USA</span>
                 </DropdownMenuItem>
               </Link>
             </DropdownMenuContent>
