@@ -11,9 +11,17 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getAffiliateLink(hyperlink: string, affiliateTag = "ohcanadadeals06-20"): string {
+export function getAffiliateLink(hyperlink: string, affiliateTag?: string): string {
   const url = new URL(hyperlink);
-  url.searchParams.set("tag", affiliateTag); // Add or update the affiliate tag
+  // Choose affiliate tag based on domain
+  if (url.hostname.endsWith(".ca")) {
+    affiliateTag = "ohcanadadeals06-20";
+  } else if (url.hostname.endsWith(".com")) {
+    affiliateTag = "patriotdeal06-20";
+  } else {
+    affiliateTag = affiliateTag || "ohcanadadeals06-20";
+  }
+  url.searchParams.set("tag", affiliateTag);
   return url.toString();
 }
 
