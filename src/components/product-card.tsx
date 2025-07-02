@@ -168,7 +168,7 @@ export default function ProductCard({ product, lastUpdated }: ProductCardProps) 
         {product.extra_offer && (
           <div className="rounded-md bg-blue-50 p-2 border border-blue-200 shadow-sm mt-2">
             <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-1 text-blue-800 font-semibold text-xs">
+              <div className="flex items-center gap-2 text-blue-800 font-semibold text-xs">
                 <Badge className="bg-blue-600 text-white text-[10px] font-medium border-0 shadow">
                   Extra Offer
                 </Badge>

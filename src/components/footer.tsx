@@ -17,7 +17,7 @@ export default function Footer() {
               Oh Canada Deals
             </h3>
             <p className="text-sm">
-              Your source for the best deals across Canada. We find the best discounts so you don&apos;t have to.
+              Your source for the best deals across Canada & USA. We find the best discounts so you don&apos;t have to.
             </p>
           </div>
 
@@ -45,7 +45,7 @@ export default function Footer() {
         <div className="mt-12 bg-blue-900/30 border border-blue-700 rounded-xl px-6 py-5 text-center shadow-inner">
           <h4 className="text-white text-lg font-semibold flex items-center justify-center gap-2 mb-2">
             <Facebook className="h-5 w-5 text-blue-500" />
-            Join Our Facebook Group
+            Join Our Canadian Facebook Group
           </h4>
           <p className="text-sm text-slate-300 mb-4 max-w-xl mx-auto">
             Connect with other deal hunters across Canada. Share tips, ask questions, and never miss a bargain.
