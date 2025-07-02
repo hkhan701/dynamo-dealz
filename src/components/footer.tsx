@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Facebook } from "lucide-react"
 import { goToFacebookGroup } from "@/lib/utils"
+import { UI_MESSAGES } from "@/lib/strings"
 
 export default function Footer() {
   return (
@@ -13,8 +14,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h3 className="etna-text text-white font-semibold mb-4 flex items-center gap-2">
-              <Image src="/ohcanadadealslogo.png" alt="OhCanadaDeals Logo" width={30} height={20} className="rounded-xl" />
-              Oh Canada Deals
+              <Image src="/ohcanadadealslogo.png" alt="Dynamo Dealz Logo" width={30} height={20} className="rounded-xl" />
+              {UI_MESSAGES.siteTitle}
             </h3>
             <p className="text-sm">
               Your source for the best deals across Canada & USA. We find the best discounts so you don&apos;t have to.
@@ -60,7 +61,7 @@ export default function Footer() {
 
         {/* Divider */}
         <div className="border-t border-slate-700 mt-8 pt-8 text-sm text-center space-y-6">
-          <p>&copy; {new Date().getFullYear()} Oh Canada Deals. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {UI_MESSAGES.siteTitle}. All rights reserved.</p>
 
           <div className="text-xs text-slate-400 leading-relaxed max-w-3xl mx-auto">
             <p>Amazon and the Amazon logo are trademarks of Amazon.com, Inc. or its affiliates.</p>

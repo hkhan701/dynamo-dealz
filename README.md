@@ -1,6 +1,6 @@
-# Oh Canada Deals
+# Dynamo Dealz
 
-Welcome to **Oh Canada Deals**, your ultimate source for finding the best discounts and deals across Canada! This project is built with [Next.js](https://nextjs.org) and leverages modern web development practices to deliver a fast, responsive, and user-friendly experience.
+Welcome to **Dynamo Dealz**, your ultimate source for finding the best discounts and deals across Canada! This project is built with [Next.js](https://nextjs.org) and leverages modern web development practices to deliver a fast, responsive, and user-friendly experience.
 
 ---
 

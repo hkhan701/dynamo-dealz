@@ -60,7 +60,7 @@ export default function Header() {
             <Image src="/ohcanadadealslogo.png" alt="Logo" fill className="object-contain p-0.5 rounded-2xl" />
           </div>
           <h1 className="text-white font-bold etna-text text-lg sm:text-xl md:text-2xl">
-            {UI_MESSAGES.oHCanadaDeals}
+            {UI_MESSAGES.siteTitle}
           </h1>
         </div>
 

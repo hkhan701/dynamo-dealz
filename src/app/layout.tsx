@@ -22,8 +22,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Oh Canada Deals",
-  description: "Find the best deals in Canada",
+  title: "Dynamo Dealz",
+  description: "Find the best deals in Canada & USA. We hunt the best discounts so you don't have to.",
 };
 
 export default function RootLayout({
