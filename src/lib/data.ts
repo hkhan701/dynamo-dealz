@@ -5,20 +5,20 @@ import { CATEGORY_MAP } from "@/lib/category";
 
 const dataFolderPath = path.join(process.cwd(), "public", "data");
 
-export async function getAllProductsFromLocalFiles(): Promise<Product[]> {
+export async function getAllProductsFromLocalFiles(prefix: string): Promise<Product[]> {
   try {
     const files = fs.readdirSync(dataFolderPath);
     const allProducts: (Product & { category: string; last_updated_time: string })[] = [];
 
     files
-      .filter((file) => file.endsWith(".json"))
+      .filter((file) => file.startsWith(`${prefix}_`) && file.endsWith(".json"))
       .forEach((file) => {
         const filePath = path.join(dataFolderPath, file);
         const fileContent = fs.readFileSync(filePath, "utf-8");
         const jsonData: ProductData = JSON.parse(fileContent);
 
         // Extract category from filename
-        const specificCategory = path.basename(file, ".json").replace(/^Canada_/, "");
+        const specificCategory = path.basename(file, ".json").replace(`${prefix}_`, "");
         const category = CATEGORY_MAP[specificCategory] ?? "Other";
 
         const productsWithMetadata = jsonData.products.map((product) => ({
