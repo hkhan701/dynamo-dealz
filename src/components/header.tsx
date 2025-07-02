@@ -54,12 +54,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 flex w-full justify-center py-4">
       <div className="mx-auto flex w-11/12 sm:max-w-[80%] md:max-w-[66%] lg:max-w-[50%] items-center justify-between rounded-full px-4 py-2 bg-leaf-background/80 backdrop-blur-md border border-border/40 shadow-md">
-        <div className="flex items-center gap-3 overflow-hidden">
-          {/* Logo + Title */}
-          <div className="relative h-9 w-9 sm:h-10 sm:w-10 overflow-hidden rounded-full shadow-sm">
-            <Image src="/ohcanadadealslogo.png" alt="Logo" fill className="object-contain p-0.5 rounded-2xl" />
-          </div>
-          <h1 className="text-white font-bold etna-text text-lg sm:text-xl md:text-2xl">
+        <div className="flex items-center justify-center gap-3 overflow-hidden">
+          <h1 className="text-white font-bold etna-text text-lg sm:text-xl md:text-2xl mb-1">
             {UI_MESSAGES.siteTitle}
           </h1>
         </div>
