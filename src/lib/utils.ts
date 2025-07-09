@@ -4,7 +4,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { useEffect, RefObject } from "react"
 
-export const WEBSITE_URL = "https://ohcanadadeals.vercel.app/";
+export const WEBSITE_URL = "https://dynamodealz.vercel.app/";
 export const SHARE_TEXT = "Check out the best Canadian deals right now! 🔥";
 
 export function cn(...inputs: ClassValue[]) {

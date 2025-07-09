@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h3 className="etna-text text-white font-semibold mb-4 flex items-center gap-2">
-              <Image src="/ohcanadadealslogo.png" alt="Dynamo Dealz Logo" width={30} height={20} className="rounded-xl" />
+              <Image src="/dynamodealzlogo.png" alt="Dynamo Dealz Logo" width={30} height={20} className="rounded-xl" />
               {UI_MESSAGES.siteTitle}
             </h3>
             <p className="text-sm">
