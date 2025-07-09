@@ -33,8 +33,8 @@ export default function Header() {
 
   const currentCountry = isCanada ? "Canada" : isUSA ? "USA" : "Canada"
   const currentFlag = isCanada
-    ? "http://purecatamphetamine.github.io/country-flag-icons/3x2/CA.svg"
-    : "http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg"
+    ? "CA.svg"
+    : "US.svg"
 
   const handleShare = (platform: string) => {
     if (platform === "copy") {
@@ -71,7 +71,7 @@ export default function Header() {
             <DropdownMenuContent align="end" className="w-44 p-1">
               <Link href="/ca" passHref>
                 <DropdownMenuItem className="flex items-center gap-2 px-3 py-2 cursor-pointer">
-                  <Image src="http://purecatamphetamine.github.io/country-flag-icons/3x2/CA.svg" alt="Canada Flag" width={20} height={15} />
+                  <Image src="CA.svg" alt="Canada Flag" width={20} height={15} />
                   <span>Canada</span>
                 </DropdownMenuItem>
               </Link>
@@ -79,7 +79,7 @@ export default function Header() {
                 <DropdownMenuItem
                   className="flex items-center gap-2 px-3 py-2"
                 >
-                  <Image src="http://purecatamphetamine.github.io/country-flag-icons/3x2/US.svg" alt="USA Flag" width={20} height={15} />
+                  <Image src="US.svg" alt="USA Flag" width={20} height={15} />
                   <span>USA</span>
                 </DropdownMenuItem>
               </Link>
