@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ChevronDown } from "lucide-react"
 import Image from "next/image"
 import { useState, useRef } from "react"
 import { Share2, Facebook, Link as LinkIcon, Zap, Users } from "lucide-react"
@@ -54,8 +53,12 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 flex w-full justify-center py-4">
       <div className="mx-auto flex w-11/12 sm:max-w-[80%] md:max-w-[66%] lg:max-w-[50%] items-center justify-between rounded-full px-4 py-2 bg-leaf-background/80 backdrop-blur-md border border-border/40 shadow-md">
-        <div className="flex items-center justify-center gap-3 overflow-hidden">
-          <h1 className="text-white font-bold etna-text text-lg sm:text-xl md:text-2xl mb-1">
+        <div className="flex items-center gap-3 overflow-hidden">
+          {/* Logo + Title */}
+          <div className="relative h-9 w-9 sm:h-10 sm:w-10 overflow-hidden rounded-full shadow-sm">
+            <Image src="/dynamodealzlogo.png" alt="Logo" fill className="object-contain p-0.5 rounded-sm" />
+          </div>
+          <h1 className="text-white font-bold etna-text text-lg sm:text-xl md:text-2xl text-wrap mb-2">
             {UI_MESSAGES.siteTitle}
           </h1>
         </div>
@@ -65,7 +68,6 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 rounded-md border bg-white text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-100 transition">
               <Image src={currentFlag} alt={`${currentCountry} Flag`} width={20} height={15} />
-              <ChevronDown className="w-4 h-4 text-gray-500" />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-44 p-1">
