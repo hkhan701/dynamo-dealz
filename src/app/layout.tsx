@@ -33,6 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="google-site-verification" content="BvjLdtWxRiKsB_Bjcl-cWWAkL1wSvAZpU1m_HNNQ-kc" />
+      </head>
       <body
         className={`${Etna.variable} ${geistSans.variable} ${geistMono.variable} antialiased bg-blush`}
       >
