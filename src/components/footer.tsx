@@ -3,8 +3,6 @@
 import Image from "next/image"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Facebook } from "lucide-react"
-import { goToFacebookGroup } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
 
 export default function Footer() {
@@ -43,7 +41,7 @@ export default function Footer() {
         </div>
 
         {/* Facebook Group CTA */}
-        <div className="mt-12 bg-blue-900/30 border border-blue-700 rounded-xl px-6 py-5 text-center shadow-inner">
+        {/* <div className="mt-12 bg-blue-900/30 border border-blue-700 rounded-xl px-6 py-5 text-center shadow-inner">
           <h4 className="text-white text-lg font-semibold flex items-center justify-center gap-2 mb-2">
             <Facebook className="h-5 w-5 text-blue-500" />
             Join Our Canadian Facebook Group
@@ -57,7 +55,7 @@ export default function Footer() {
           >
             Join Now - It&apos;s Free
           </Button>
-        </div>
+        </div> */}
 
         {/* Divider */}
         <div className="border-t border-slate-700 mt-8 pt-8 text-sm text-center space-y-6">

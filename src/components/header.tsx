@@ -9,13 +9,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Image from "next/image"
 import { useState, useRef } from "react"
-import { Share2, Facebook, Link as LinkIcon, Zap, Users } from "lucide-react"
+import { Share2, Facebook, Link as LinkIcon, Zap } from "lucide-react"
 import {
   buildShareUrl,
   WEBSITE_URL,
   SHARE_TEXT,
   useClickOutside,
-  goToFacebookGroup,
 } from "@/lib/utils"
 import { UI_MESSAGES } from "@/lib/strings"
 import { toast } from "sonner"
@@ -158,7 +157,7 @@ export default function Header() {
               </div>
 
               {/* Facebook Group Join Button */}
-              <div className="mt-3 pt-3 border-t border-gray-100">
+              {/* <div className="mt-3 pt-3 border-t border-gray-100">
                 <button
                   onClick={() => goToFacebookGroup()}
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg flex items-center justify-center gap-2"
@@ -170,7 +169,7 @@ export default function Header() {
                 <p className="text-xs text-gray-500 mt-2 text-center">
                   🎯 Never miss another bargain!
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
 
