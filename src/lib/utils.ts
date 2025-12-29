@@ -17,7 +17,7 @@ export function getAffiliateLink(hyperlink: string, affiliateTag?: string): stri
   if (url.hostname.endsWith(".ca")) {
     affiliateTag = "ohcanadadeals06-20";
   } else if (url.hostname.endsWith(".com")) {
-    affiliateTag = "patriotdeal06-20";
+    affiliateTag = "dealzdynamo00-20";
   } else {
     affiliateTag = affiliateTag || "ohcanadadeals06-20";
   }
